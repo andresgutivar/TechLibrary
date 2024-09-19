@@ -13,9 +13,11 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController(); //useState
 
   void _login() {
+    //funcion que se llamara para hacer la conceccion
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    Navigator.pushNamed(context, '/homeScreen');
     // Aquí puedes agregar la lógica para iniciar sesión con Firebase
     print("Email: $email, Password: $password");
   }
@@ -40,8 +42,9 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 800,
                 child: TextField(
-                  controller: _emailController,
+                  controller: _emailController, //onchangeText = setEmail
                   decoration: InputDecoration(
+                    //style = {{icon...}}
                     labelText: 'Correo electrónico',
                     prefixIcon: const Icon(Icons.email, color: customColor),
                     focusedBorder: OutlineInputBorder(
@@ -68,18 +71,54 @@ class _LoginPageState extends State<LoginPage> {
                 width: 800,
                 child: TextField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    //style = {{icon...}}
+                    labelText: 'Clave',
+                    prefixIcon: const Icon(Icons.email, color: customColor),
+                    focusedBorder: OutlineInputBorder(
+                      //color del borde para cuando esta seleccionado
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: customColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      //color del borde para cuando No esta seleccionado
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: customColor.withOpacity(0.5),
+                        width: 2,
+                      ),
+                    ),
                   ),
-                  obscureText: true,
+                  obscureText: true, //ocultar clave
                 ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Iniciar Sesión'),
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
+                    foregroundColor: Colors.black, // Color del texto
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    // Espaciado interno
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(12), // Bordes redondeados
+                    ),
+                    elevation: 6, // Sombra del botón
+                  ),
+                  child: const Text(
+                    'Iniciar Sesión',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
+
               const SizedBox(height: 16),
               // Texto con enlace de recuperación de contraseña
               RichText(
@@ -97,7 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                       recognizer: TapGestureRecognizer() //de libreria importada
                         ..onTap = () {
                           // Navegar a otra pantalla o acción
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushNamed(
+                              context, '/'); //navigation.navigate(...)
                         },
                     ),
                   ],
