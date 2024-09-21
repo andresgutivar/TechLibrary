@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    Navigator.pushNamed(context, '/homeScreen');
+    Navigator.pushNamed(context, '/home');
     // Aquí puedes agregar la lógica para iniciar sesión con Firebase
     print("Email: $email, Password: $password");
   }
@@ -136,8 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                       recognizer: TapGestureRecognizer() //de libreria importada
                         ..onTap = () {
                           // Navegar a otra pantalla o acción
-                          Navigator.pushNamed(
-                              context, '/'); //navigation.navigate(...)
+                          Navigator.pushNamed(context,
+                              '/recoverAccount'); //navigation.navigate(...)
                         },
                     ),
                   ],
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       recognizer: TapGestureRecognizer() //de libreria importada
                         ..onTap = () {
                           // Navegar a otra pantalla o acción
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushNamed(context, '/signUp');
                         },
                     ),
                   ],
