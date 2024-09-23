@@ -25,8 +25,9 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         width: buttonWidth,
                         child: ElevatedButton(
+                          // style: ButtonStyle(backgroundColor: customColor),
                           onPressed: () {},
-                          child: const Text('Enabled 1'),
+                          child: const Text('Agregar usuario'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
                         width: buttonWidth,
                         child: ElevatedButton(
                           onPressed: () {},
-                          child: const Text('Enabled 2'),
+                          child: const Text('Usuarios'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                         width: buttonWidth,
                         child: ElevatedButton(
                           onPressed: () {},
-                          child: const Text('Enabled 3'),
+                          child: const Text('Agregar libro'),
                         ),
                       ),
                     ],
@@ -69,47 +70,29 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.network(
-                    'https://picsum.photos/seed/470/600',
-                    fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            children: [
+              Card(
+                color: customColor,
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
+                  onTap: () {
+                    debugPrint('Card tapped.');
+                  },
+                  child: const SizedBox(
+                    width: 1000,
+                    height: 100,
+                    child: Text('A card that can be tapped'),
                   ),
                 ),
-                const Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text('Hello World'),
-                    Text('Hello World'),
-                    ElevatedButton(
-                      onPressed: AlertDialog.new,
-                      child: Text("data"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              )
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

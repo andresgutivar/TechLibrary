@@ -168,7 +168,6 @@ class _RecoverAccountPageState extends State<SingUpPage> {
                       ),
                     ),
                   ),
-                  obscureText: true, //ocultar clave
                 ),
               ),
               const SizedBox(height: 16),
@@ -226,7 +225,6 @@ class _RecoverAccountPageState extends State<SingUpPage> {
                       ),
                     ),
                   ),
-                  obscureText: true, //ocultar clave
                 ),
               ),
               const SizedBox(height: 16),
