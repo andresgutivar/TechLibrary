@@ -1,11 +1,23 @@
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  static const Color customColor = Color.fromARGB(210, 81, 232, 55);
+  static const Color backgroundColorOptions = Color(0xfff8FFF7C);
+  void _logOut() {
+    //logica para cerrar sesion
+    Navigator.pushNamed(context, '/login');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const Color customColor = Color.fromARGB(210, 81, 232, 55);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
@@ -16,8 +28,7 @@ class HomePage extends StatelessWidget {
               title: LayoutBuilder(
                 builder: (context, constraints) {
                   // Calcular el ancho disponible para los botones
-                  double buttonWidth = (constraints.maxWidth - 2 * 16) /
-                      3; // tres botones y dos espacios de 16px
+                  double buttonWidth = (constraints.maxWidth - 2 * 16) / 3;
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -25,8 +36,17 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         width: buttonWidth,
                         child: ElevatedButton(
-                          // style: ButtonStyle(backgroundColor: customColor),
-                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: backgroundColorOptions,
+                            foregroundColor: Colors.black,
+                            side: const BorderSide(
+                              color: customColor, // Color del borde
+                              width: 3, // Ancho del borde
+                            ),
+                          ),
+                          onPressed: () {
+                            // Acción al agregar usuario
+                          },
                           child: const Text('Agregar usuario'),
                         ),
                       ),
@@ -34,7 +54,17 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         width: buttonWidth,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: backgroundColorOptions,
+                            foregroundColor: Colors.black,
+                            side: const BorderSide(
+                              color: customColor, // Color del borde
+                              width: 3, // Ancho del borde
+                            ),
+                          ),
+                          onPressed: () {
+                            // Acción al mostrar usuarios
+                          },
                           child: const Text('Usuarios'),
                         ),
                       ),
@@ -42,7 +72,17 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         width: buttonWidth,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: backgroundColorOptions,
+                            foregroundColor: Colors.black,
+                            side: const BorderSide(
+                              color: customColor, // Color del borde
+                              width: 3, // Ancho del borde
+                            ),
+                          ),
+                          onPressed: () {
+                            // Acción al agregar libro
+                          },
                           child: const Text('Agregar libro'),
                         ),
                       ),
@@ -57,7 +97,8 @@ class HomePage extends StatelessWidget {
                   child: IconButton(
                     icon: const Icon(Icons.logout_outlined),
                     color: Colors.black,
-                    onPressed: () {},
+                    onPressed: _logOut, // Acción al cerrar sesión
+
                     iconSize: 30,
                   ),
                 ),
@@ -73,27 +114,40 @@ class HomePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: Column(
+          child: ListView(
+            padding: const EdgeInsets.all(8.0),
             children: [
-              Card(
-                color: customColor,
-                clipBehavior: Clip.hardEdge,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    debugPrint('Card tapped.');
-                  },
-                  child: const SizedBox(
-                    width: 1000,
-                    height: 100,
-                    child: Text('A card that can be tapped'),
-                  ),
-                ),
-              )
+              _buildExpansionTileCard(),
+              _buildExpansionTileCard() // Aquí llamamos a nuestro método para crear la tarjeta
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildExpansionTileCard() {
+    //aca se podria hacer un for que lea la base de datos y retorne todos los valores
+    return const ExpansionTileCard(
+      title: Text('Título de la tarjeta'),
+      subtitle: Text('Subtítulo'),
+      leading: Icon(Icons.info_outline),
+      children: <Widget>[
+        Divider(
+          thickness: 1.0,
+          height: 1.0,
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Este es el contenido dentro de la tarjeta expansible.'),
+              Text('Puedes agregar más widgets aquí.'),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
