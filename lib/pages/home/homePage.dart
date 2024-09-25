@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onPressed: () {
                             // Acción al agregar libro
+                            Navigator.pushNamed(context, '/registerBook');
                           },
                           child: const Text('Agregar libro'),
                         ),
@@ -142,14 +143,14 @@ class _HomePageState extends State<HomePage> {
             prefixIcon: const Icon(Icons.search), // Icono de búsqueda
             hintText: 'Buscar...', // Texto de sugerencia
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0), // Bordes redondeados
+              borderRadius: BorderRadius.circular(20.0), // Bordes redondeados
               borderSide:
                   const BorderSide(color: Colors.grey), // Color del borde
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0), // Bordes redondeados
+              borderRadius: BorderRadius.circular(20.0), // Bordes redondeados
               borderSide: const BorderSide(
-                  color: Colors.blue), // Color del borde al tener foco
+                  color: customColor), // Color del borde al tener foco
             ),
           ),
           onChanged: (value) {
@@ -199,9 +200,7 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {
-                    // Acción al agregar libro
-                  },
+                  onPressed: () {},
                 ),
               ),
               Padding(
@@ -214,9 +213,7 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {
-                    // Acción al agregar libro
-                  },
+                  onPressed: () {},
                 ),
               ),
               Padding(
@@ -229,9 +226,7 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {
-                    // Acción al agregar libro
-                  },
+                  onPressed: () {},
                 ),
               ),
             ],
