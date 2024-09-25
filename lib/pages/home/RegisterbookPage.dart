@@ -407,7 +407,7 @@ class _RegisterbookState extends State<RegisterbookPage> {
                       elevation: 6, // Sombra del botón
                     ),
                     child: const Text(
-                      'Iniciar Sesión',
+                      'Registrar libro',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
