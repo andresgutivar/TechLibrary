@@ -8,18 +8,38 @@ class RegisterbookPage extends StatefulWidget {
 }
 
 class _RegisterbookState extends State<RegisterbookPage> {
-  final _emailController =
-      TextEditingController(); // Controlador para el correo
-  final _passwordController =
-      TextEditingController(); // Controlador para la contraseña
+  final _tittle = TextEditingController();
+  final _editorial = TextEditingController();
+  final _author = TextEditingController();
+  final _location = TextEditingController();
+  final _entryDate = TextEditingController();
+  final _primaryDescriptor = TextEditingController();
+  final _numberPages = TextEditingController();
+  final _isbnCode = TextEditingController();
+  final _secondaryDescriptor = TextEditingController();
+  final _editingPlace = TextEditingController();
+  final _edition = TextEditingController();
+  final _yearEdition = TextEditingController();
+  final _notes = TextEditingController();
 
   void _registerBook() {
     // Función que se llamará al registrar
-    String email = _emailController.text;
-    String password = _passwordController.text;
+    String tittle = _tittle.text;
+    String editorial = _editorial.text;
+    String author = _author.text;
+    String location = _location.text;
+    String entryDate = _entryDate.text;
+    String primaryDescriptor = _primaryDescriptor.text;
+    String numberPages = _numberPages.text;
+    String isbnCode = _isbnCode.text;
+    String secondaryDescriptor = _secondaryDescriptor.text;
+    String editingPlace = _editingPlace.text;
+    String edition = _edition.text;
+    String yearEdition = _yearEdition.text;
+    String notes = _notes.text;
 
     Navigator.pushNamed(context, '/home');
-    print("Email: $email, Password: $password");
+    //  print("Email: $email, Password: $password");
   }
 
   @override
@@ -38,13 +58,15 @@ class _RegisterbookState extends State<RegisterbookPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _tittle, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Titulo',
+                      prefixIcon:
+                          const Icon(Icons.title_outlined, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -66,10 +88,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _editorial, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Editorial',
+                      prefixIcon: const Icon(Icons.numbers, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -91,10 +113,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _author, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Autor/Autora',
+                      prefixIcon: const Icon(Icons.person, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -116,10 +138,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _location, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Ubicación',
+                      prefixIcon: const Icon(Icons.map, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -141,10 +163,11 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _entryDate, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Fecha de ingreso',
+                      prefixIcon:
+                          const Icon(Icons.calendar_month, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -166,10 +189,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _primaryDescriptor, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Descriptor primario',
+                      prefixIcon: const Icon(Icons.star, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -191,10 +214,11 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _secondaryDescriptor, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Descriptor secundario',
+                      prefixIcon:
+                          const Icon(Icons.star_half, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -216,10 +240,11 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _numberPages, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Cantidad de paginas',
+                      prefixIcon:
+                          const Icon(Icons.auto_stories, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -241,10 +266,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _isbnCode, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Codigo ISBN',
+                      prefixIcon: const Icon(Icons.vpn_key, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -266,10 +291,11 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _editingPlace, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Lugar de edicion',
+                      prefixIcon:
+                          const Icon(Icons.location_on, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -291,10 +317,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _edition, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Edicion',
+                      prefixIcon: const Icon(Icons.tag, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -316,10 +342,10 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _yearEdition, // Controlador del correo
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      labelText: 'Año de edicion',
+                      prefixIcon: const Icon(Icons.event, color: customColor),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -341,10 +367,11 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    // controller: _emailController, // Controlador del correo
+                    controller: _notes, // Controlador del correo
+                    maxLines: 5,
                     decoration: InputDecoration(
-                      labelText: 'Correo electrónico',
-                      prefixIcon: const Icon(Icons.email, color: customColor),
+                      alignLabelWithHint: true,
+                      labelText: 'Notas',
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
@@ -359,6 +386,30 @@ class _RegisterbookState extends State<RegisterbookPage> {
                           width: 2,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: _registerBook,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
+                      foregroundColor: Colors.black, // Color del texto
+                      padding: const EdgeInsets.symmetric(vertical: 14.0),
+                      // Espaciado interno
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(12), // Bordes redondeados
+                      ),
+                      elevation: 6, // Sombra del botón
+                    ),
+                    child: const Text(
+                      'Iniciar Sesión',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
