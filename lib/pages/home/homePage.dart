@@ -111,43 +111,133 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: ListView(
-            padding: const EdgeInsets.all(8.0),
-            children: [
-              _buildExpansionTileCard(),
-              _buildExpansionTileCard() // Aquí llamamos a nuestro método para crear la tarjeta
-            ],
+      body: Column(
+        children: [
+          _buildSearchBar(), // Coloca el SearchBar aquí
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
+              children: [
+                _buildExpansionTileCard(),
+                _buildExpansionTileCard(), // Aquí llamamos a nuestro método para crear la tarjeta
+              ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        constraints: const BoxConstraints(
+          maxHeight: 50.0, // Controlar la altura máxima
+          minWidth: 200.0, // Controlar el ancho mínimo
+          maxWidth: 1000.0, // Controlar el ancho máximo
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search), // Icono de búsqueda
+            hintText: 'Buscar...', // Texto de sugerencia
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0), // Bordes redondeados
+              borderSide:
+                  const BorderSide(color: Colors.grey), // Color del borde
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0), // Bordes redondeados
+              borderSide: const BorderSide(
+                  color: Colors.blue), // Color del borde al tener foco
+            ),
+          ),
+          onChanged: (value) {
+            // Aquí puedes manejar el cambio de texto
+          },
         ),
       ),
     );
   }
 
   Widget _buildExpansionTileCard() {
-    //aca se podria hacer un for que lea la base de datos y retorne todos los valores
-    return const ExpansionTileCard(
-      title: Text('Título de la tarjeta'),
-      subtitle: Text('Subtítulo'),
-      leading: Icon(Icons.info_outline),
-      children: <Widget>[
-        Divider(
-          thickness: 1.0,
-          height: 1.0,
-        ),
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Este es el contenido dentro de la tarjeta expansible.'),
-              Text('Puedes agregar más widgets aquí.'),
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: ExpansionTileCard(
+        baseColor: backgroundColorOptions,
+        expandedColor: backgroundColorOptions,
+        title: const Text('<tittleBook>'),
+        subtitle: const Text('<descriptor primario>'),
+        leading: const Icon(Icons.done),
+        children: <Widget>[
+          const Divider(
+            thickness: 1.0,
+            height: 1.0,
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Autor: <AuthorBook> '),
+                Text('Code: <ISBN>'),
+              ],
+            ),
+          ),
+          OverflowBar(
+            alignment: MainAxisAlignment.center,
+            spacing: 60.0,
+            overflowAlignment: OverflowBarAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Editar'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () {
+                    // Acción al agregar libro
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.delete),
+                  label: const Text('Eliminar'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () {
+                    // Acción al agregar libro
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.info_outline),
+                  label: const Text('Detalles'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () {
+                    // Acción al agregar libro
+                  },
+                ),
+              ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
