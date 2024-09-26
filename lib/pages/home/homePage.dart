@@ -21,12 +21,11 @@ class _HomePageState extends State<HomePage> {
     _authService.signOut(context);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const myAppBarWidget(
+        title: myAppBarWidget(
           customColor: customColor,
           backgroundColorOptions: backgroundColorOptions,
         ),
@@ -160,8 +159,8 @@ class _HomePageState extends State<HomePage> {
 class myAppBarWidget extends StatelessWidget {
   final Color customColor;
   final Color backgroundColorOptions;
-
-  const myAppBarWidget(
+  final _authService = AuthenticationService();
+  myAppBarWidget(
       {super.key,
       required this.customColor,
       required this.backgroundColorOptions});
@@ -248,7 +247,7 @@ class myAppBarWidget extends StatelessWidget {
                   color: Colors.black,
                   onPressed: () {
                     // Acción al agregar libro
-                    Navigator.pushNamed(context, '/login');
+                    _authService.signOut(context);
                   }, // Acción al cerrar sesión
 
                   iconSize: 30,
