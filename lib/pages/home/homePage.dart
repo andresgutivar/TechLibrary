@@ -11,10 +11,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
-  void _logOut() {
-    //logica para cerrar sesion
-    Navigator.pushNamed(context, '/login');
-  }
 
   @override
   Widget build(BuildContext context) {
