@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
+
   final _authService = AuthenticationService();
 
   void _logOut() {
@@ -20,101 +21,16 @@ class _HomePageState extends State<HomePage> {
     _authService.signOut(context);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: Column(
-          children: [
-            AppBar(
-              automaticallyImplyLeading: false,
-              title: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Calcular el ancho disponible para los botones
-                  double buttonWidth = (constraints.maxWidth - 2 * 16) / 3;
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: buttonWidth,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: backgroundColorOptions,
-                            foregroundColor: Colors.black,
-                            side: const BorderSide(
-                              color: customColor, // Color del borde
-                              width: 3, // Ancho del borde
-                            ),
-                          ),
-                          onPressed: () {
-                            // Acción al agregar usuario
-                          },
-                          child: const Text('Agregar usuario'),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      SizedBox(
-                        width: buttonWidth,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: backgroundColorOptions,
-                            foregroundColor: Colors.black,
-                            side: const BorderSide(
-                              color: customColor, // Color del borde
-                              width: 3, // Ancho del borde
-                            ),
-                          ),
-                          onPressed: () {
-                            // Acción al mostrar usuarios
-                          },
-                          child: const Text('Usuarios'),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      SizedBox(
-                        width: buttonWidth,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: backgroundColorOptions,
-                            foregroundColor: Colors.black,
-                            side: const BorderSide(
-                              color: customColor, // Color del borde
-                              width: 3, // Ancho del borde
-                            ),
-                          ),
-                          onPressed: () {
-                            // Acción al agregar libro
-                            Navigator.pushNamed(context, '/registerBook');
-                          },
-                          child: const Text('Agregar libro'),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              centerTitle: true,
-              actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: IconButton(
-                    icon: const Icon(Icons.logout_outlined),
-                    color: Colors.black,
-                    onPressed: _logOut, // Acción al cerrar sesión
-
-                    iconSize: 30,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              height: 2,
-              color: Colors.black,
-            ),
-          ],
+      appBar: AppBar(
+        title: const myAppBarWidget(
+          customColor: customColor,
+          backgroundColorOptions: backgroundColorOptions,
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -234,6 +150,115 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class myAppBarWidget extends StatelessWidget {
+  final Color customColor;
+  final Color backgroundColorOptions;
+
+  const myAppBarWidget(
+      {super.key,
+      required this.customColor,
+      required this.backgroundColorOptions});
+  @override
+  Widget build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(80),
+      child: Column(
+        children: [
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: LayoutBuilder(
+              builder: (context, constraints) {
+                // Calcular el ancho disponible para los botones
+                double buttonWidth = (constraints.maxWidth - 2 * 16) / 3;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: buttonWidth,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundColorOptions,
+                          foregroundColor: Colors.black,
+                          side: BorderSide(
+                            color: customColor, // Color del borde
+                            width: 3, // Ancho del borde
+                          ),
+                        ),
+                        onPressed: () {
+                          // Acción al agregar usuario
+                        },
+                        child: const Text('Agregar usuario'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: buttonWidth,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundColorOptions,
+                          foregroundColor: Colors.black,
+                          side: BorderSide(
+                            color: customColor, // Color del borde
+                            width: 3, // Ancho del borde
+                          ),
+                        ),
+                        onPressed: () {
+                          // Acción al mostrar usuarios
+                        },
+                        child: const Text('Usuarios'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: buttonWidth,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundColorOptions,
+                          foregroundColor: Colors.black,
+                          side: BorderSide(
+                            color: customColor, // Color del borde
+                            width: 3, // Ancho del borde
+                          ),
+                        ),
+                        onPressed: () {
+                          // Acción al agregar libro
+                          Navigator.pushNamed(context, '/registerBook');
+                        },
+                        child: const Text('Agregar libro'),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            centerTitle: true,
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: IconButton(
+                  icon: const Icon(Icons.logout_outlined),
+                  color: Colors.black,
+                  onPressed: () {
+                    // Acción al agregar libro
+                    Navigator.pushNamed(context, '/login');
+                  }, // Acción al cerrar sesión
+
+                  iconSize: 30,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
           ),
         ],
       ),
