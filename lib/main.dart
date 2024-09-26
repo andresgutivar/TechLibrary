@@ -1,3 +1,5 @@
+import 'package:biblioteca/services/authentication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -12,14 +14,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final AuthenticationService authService = AuthenticationService();
+
+  MyApp({super.key});
+
+  // Stream that listens to authentication state changes
+  Stream<User?> get authStateChanges => auth.authStateChanges();
 
   @override
   Widget build(BuildContext context) {
+    Future<void> signOut(BuildContext context) async {
+      await FirebaseAuth.instance.signOut();
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -27,12 +39,36 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: StreamBuilder<User?>(
+        stream: authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            // If the snapshot has data, it means a user is logged in
+            if (snapshot.data != null) {
+              if (snapshot.data!.emailVerified) {
+                return const HomePage();
+              } else {
+                signOut(context);
+                return LoginPage();
+              }
+            } else {
+              // No user logged in
+              return LoginPage();
+            }
+          } else {
+            // Waiting for authentication state to be available
+            return const Scaffold(
+                body: Center(
+              child: CircularProgressIndicator(),
+            ));
+          }
+        },
+      ),
       routes: {
-        '/login': (context) => const LoginPage(),
+        '/login': (context) => LoginPage(),
         '/home': (context) => const HomePage(),
-        '/recoverAccount': (context) => const RecoverAccountPage(),
-        '/signUp': (context) => const SingUpPage(),
+        '/recoverAccount': (context) => RecoverAccountPage(),
+        '/signUp': (context) => SingUpPage(),
         '/registerBook': (context) => const RegisterbookPage(),
       },
     );

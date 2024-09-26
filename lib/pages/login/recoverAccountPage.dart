@@ -1,24 +1,11 @@
+import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
 
-class RecoverAccountPage extends StatefulWidget {
-  //decimos que esta pantalla sufrira modificaciones con "StatefulWidget"
-  const RecoverAccountPage({super.key});
+class RecoverAccountPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final AuthenticationService authService = AuthenticationService();
 
-  @override
-  State<RecoverAccountPage> createState() => _RecoverAccountPageState();
-}
-
-class _RecoverAccountPageState extends State<RecoverAccountPage> {
-  final _emailController = TextEditingController(); //useState
-
-  void _login() {
-    //funcion que se llamara para hacer la conceccion
-    String email = _emailController.text;
-
-    Navigator.pushNamed(context, '/home');
-    // Aquí puedes agregar la lógica para iniciar sesión con Firebase
-    print("Email: $email");
-  }
+  RecoverAccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +59,7 @@ class _RecoverAccountPageState extends State<RecoverAccountPage> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: _login,
+                  onPressed: () => _recoverAccount(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
@@ -96,5 +83,9 @@ class _RecoverAccountPageState extends State<RecoverAccountPage> {
         ),
       ),
     );
+  }
+
+  void _recoverAccount(BuildContext context) {
+    authService.requestRecovery(context, _emailController.text);
   }
 }
