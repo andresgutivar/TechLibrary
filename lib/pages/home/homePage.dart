@@ -1,3 +1,4 @@
+import 'package:biblioteca/services/authentication.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
+  final _authService = AuthenticationService();
+
   void _logOut() {
     //logica para cerrar sesion
-    Navigator.pushNamed(context, '/login');
+    //Navigator.pushNamed(context, '/login');
+    _authService.signOut(context);
   }
 
   @override

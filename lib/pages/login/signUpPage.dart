@@ -1,35 +1,16 @@
+import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
 
-class SingUpPage extends StatefulWidget {
-  //decimos que esta pantalla sufrira modificaciones con "StatefulWidget"
-  const SingUpPage({super.key});
+class SingUpPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _dniController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final AuthenticationService authService = AuthenticationService();
 
-  @override
-  State<SingUpPage> createState() => _RecoverAccountPageState();
-}
-
-class _RecoverAccountPageState extends State<SingUpPage> {
-  final _emailController = TextEditingController(); //useState
-  final _passwordController = TextEditingController(); //useState
-  final _nameController = TextEditingController(); //useState
-  final _lastNameController = TextEditingController(); //useState
-  final _dniController = TextEditingController(); //useState
-  final _phoneController = TextEditingController(); //useState
-
-  void _login() {
-    //funcion que se llamara para hacer la conceccion
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    String name = _nameController.text;
-    String lastName = _lastNameController.text;
-    String dni = _dniController.text;
-    String phone = _phoneController.text;
-
-    Navigator.pushNamed(context, '/home');
-    // Aquí puedes agregar la lógica para iniciar sesión con Firebase
-    print(
-        "Email: $email, Password: $password name: $name, lastName: $lastName dni: $dni, phone: $phone");
-  }
+  SingUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +212,7 @@ class _RecoverAccountPageState extends State<SingUpPage> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: _login,
+                  onPressed: () => _signUp(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
@@ -255,5 +236,10 @@ class _RecoverAccountPageState extends State<SingUpPage> {
         ),
       ),
     );
+  }
+
+  void _signUp(BuildContext context) {
+    authService.signUp(
+        context, _emailController.text, _passwordController.text);
   }
 }

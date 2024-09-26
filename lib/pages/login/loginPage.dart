@@ -1,25 +1,23 @@
+import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/gestures.dart'; //para verificar cuando se da click al texto de "recuperala"
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthenticationService authService = AuthenticationService();
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
+  LoginPage({super.key});
 
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController(); //useState
-  final _passwordController = TextEditingController(); //useState
-
-  void _login() {
+  void _login(BuildContext context) {
     //funcion que se llamara para hacer la conceccion
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    Navigator.pushNamed(context, '/home');
+    // String email = _emailController.text;
+    // String password = _passwordController.text;
+    authService.signInWithEmailAndPassword(
+        context, _emailController.text, _passwordController.text);
+    //Navigator.pushNamed(context, '/home');
     // Aquí puedes agregar la lógica para iniciar sesión con Firebase
-    print("Email: $email, Password: $password");
+    //print("Email: $email, Password: $password");
   }
 
   @override
@@ -99,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: _login,
+                  onPressed: () => _login(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
