@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
 
-class RegisterbookPage extends StatefulWidget {
-  const RegisterbookPage({super.key});
+class RegisterbookPage extends StatelessWidget {
+  RegisterbookPage({super.key});
 
-  @override
-  State<RegisterbookPage> createState() => _RegisterbookState();
-}
+  // Controladores de texto
+  final TextEditingController _tittle = TextEditingController();
+  final TextEditingController _editorial = TextEditingController();
+  final TextEditingController _author = TextEditingController();
+  final TextEditingController _location = TextEditingController();
+  final TextEditingController _entryDate = TextEditingController();
+  final TextEditingController _primaryDescriptor = TextEditingController();
+  final TextEditingController _numberPages = TextEditingController();
+  final TextEditingController _isbnCode = TextEditingController();
+  final TextEditingController _secondaryDescriptor = TextEditingController();
+  final TextEditingController _editingPlace = TextEditingController();
+  final TextEditingController _edition = TextEditingController();
+  final TextEditingController _yearEdition = TextEditingController();
+  final TextEditingController _notes = TextEditingController();
 
-class _RegisterbookState extends State<RegisterbookPage> {
-  final _tittle = TextEditingController();
-  final _editorial = TextEditingController();
-  final _author = TextEditingController();
-  final _location = TextEditingController();
-  final _entryDate = TextEditingController();
-  final _primaryDescriptor = TextEditingController();
-  final _numberPages = TextEditingController();
-  final _isbnCode = TextEditingController();
-  final _secondaryDescriptor = TextEditingController();
-  final _editingPlace = TextEditingController();
-  final _edition = TextEditingController();
-  final _yearEdition = TextEditingController();
-  final _notes = TextEditingController();
+  void _registerBook(BuildContext context) {
+    // Verificar que todos los campos excepto notas estén completos
+    if (_tittle.text.isEmpty ||
+        _editorial.text.isEmpty ||
+        _author.text.isEmpty ||
+        _location.text.isEmpty ||
+        _entryDate.text.isEmpty ||
+        _primaryDescriptor.text.isEmpty ||
+        _numberPages.text.isEmpty ||
+        _isbnCode.text.isEmpty ||
+        _secondaryDescriptor.text.isEmpty ||
+        _editingPlace.text.isEmpty ||
+        _edition.text.isEmpty ||
+        _yearEdition.text.isEmpty) {
+      // Mostrar un mensaje de error si faltan campos
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, completa todos los campos obligatorios.'),
+        ),
+      );
+      return;
+    }
 
-  void _registerBook() {
-    // Función que se llamará al registrar
-    String tittle = _tittle.text;
-    String editorial = _editorial.text;
-    String author = _author.text;
-    String location = _location.text;
-    String entryDate = _entryDate.text;
-    String primaryDescriptor = _primaryDescriptor.text;
-    String numberPages = _numberPages.text;
-    String isbnCode = _isbnCode.text;
-    String secondaryDescriptor = _secondaryDescriptor.text;
-    String editingPlace = _editingPlace.text;
-    String edition = _edition.text;
-    String yearEdition = _yearEdition.text;
-    String notes = _notes.text;
-
+    // Si todos los campos están completos, navegar a la página principal
     Navigator.pushNamed(context, '/home');
-    //  print("Email: $email, Password: $password");
   }
 
   @override
@@ -53,316 +56,44 @@ class _RegisterbookState extends State<RegisterbookPage> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: SingleChildScrollView(
-            // Scroll para evitar overflow
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _tittle, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Titulo',
-                      prefixIcon:
-                          const Icon(Icons.title_outlined, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(
+                    _tittle, 'Titulo', Icons.title_outlined, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _editorial, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Editorial',
-                      prefixIcon: const Icon(Icons.numbers, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(
+                    _editorial, 'Editorial', Icons.numbers, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _author, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Autor/Autora',
-                      prefixIcon: const Icon(Icons.person, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(
+                    _author, 'Autor/Autora', Icons.person, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _location, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Ubicación',
-                      prefixIcon: const Icon(Icons.map, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_location, 'Ubicación', Icons.map, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _entryDate, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Fecha de ingreso',
-                      prefixIcon:
-                          const Icon(Icons.calendar_month, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_entryDate, 'Fecha de ingreso',
+                    Icons.calendar_month, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _primaryDescriptor, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Descriptor primario',
-                      prefixIcon: const Icon(Icons.star, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_primaryDescriptor, 'Descriptor primario',
+                    Icons.star, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _secondaryDescriptor, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Descriptor secundario',
-                      prefixIcon:
-                          const Icon(Icons.star_half, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_secondaryDescriptor, 'Descriptor secundario',
+                    Icons.star_half, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _numberPages, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Cantidad de paginas',
-                      prefixIcon:
-                          const Icon(Icons.auto_stories, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_numberPages, 'Cantidad de paginas',
+                    Icons.auto_stories, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _isbnCode, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Codigo ISBN',
-                      prefixIcon: const Icon(Icons.vpn_key, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(
+                    _isbnCode, 'Codigo ISBN', Icons.vpn_key, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _editingPlace, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Lugar de edicion',
-                      prefixIcon:
-                          const Icon(Icons.location_on, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_editingPlace, 'Lugar de edicion',
+                    Icons.location_on, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _edition, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Edicion',
-                      prefixIcon: const Icon(Icons.tag, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(_edition, 'Edicion', Icons.tag, customColor),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: 800,
-                  child: TextField(
-                    controller: _yearEdition, // Controlador del correo
-                    decoration: InputDecoration(
-                      labelText: 'Año de edicion',
-                      prefixIcon: const Icon(Icons.event, color: customColor),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: customColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildTextField(
+                    _yearEdition, 'Año de edicion', Icons.event, customColor),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
@@ -393,18 +124,15 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: _registerBook,
+                    onPressed: () => _registerBook(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
-                      foregroundColor: Colors.black, // Color del texto
+                      backgroundColor: const Color(0xFF8FFF7C),
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 14.0),
-                      // Espaciado interno
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Bordes redondeados
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 6, // Sombra del botón
+                      elevation: 6,
                     ),
                     child: const Text(
                       'Registrar libro',
@@ -416,6 +144,30 @@ class _RegisterbookState extends State<RegisterbookPage> {
                 const SizedBox(height: 16),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String labelText,
+      IconData icon, Color color,
+      {int maxLines = 1}) {
+    return SizedBox(
+      width: 800,
+      child: TextField(
+        controller: controller,
+        maxLines: maxLines,
+        decoration: InputDecoration(
+          labelText: labelText,
+          prefixIcon: Icon(icon, color: color),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: color, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: color.withOpacity(0.5), width: 2),
           ),
         ),
       ),

@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/recoverAccount': (context) => RecoverAccountPage(),
         '/signUp': (context) => SingUpPage(),
-        '/registerBook': (context) => const RegisterbookPage(),
+        '/registerBook': (context) => RegisterbookPage(),
       },
     );
   }

@@ -2,14 +2,7 @@ import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SingUpPage extends StatefulWidget {
-  const SingUpPage({super.key});
-
-  @override
-  State<SingUpPage> createState() => _SingUpPageState();
-}
-
-class _SingUpPageState extends State<SingUpPage> {
+class SingUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -18,6 +11,8 @@ class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _phoneController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
   final _formKey = GlobalKey<FormState>();
+
+  SingUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,28 +42,22 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: 800,
                   child: TextFormField(
                     validator: (value) {
-                      // Se fija si hay algo escrito
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
-
-                      // Se fija si es un email valido
                       String pattern =
                           r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
                       RegExp regex = RegExp(pattern);
                       if (!regex.hasMatch(value)) {
                         return 'El correo electrónico debe ser válido';
                       }
-
                       return null;
                     },
-                    controller: _emailController, //onchangeText = setEmail
+                    controller: _emailController,
                     decoration: InputDecoration(
-                      //style = {{icon...}}
                       labelText: 'Correo electrónico',
                       prefixIcon: const Icon(Icons.email, color: customColor),
                       focusedBorder: OutlineInputBorder(
-                        //color del borde para cuando esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
                           color: customColor,
@@ -76,7 +65,6 @@ class _SingUpPageState extends State<SingUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        //color del borde para cuando No esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
                           color: customColor.withOpacity(0.5),
@@ -92,20 +80,17 @@ class _SingUpPageState extends State<SingUpPage> {
                     width: 392,
                     child: TextFormField(
                       validator: (value) {
-                        // Se fija si hay algo escrito
                         if (value == null || value.isEmpty) {
                           return 'El campo no debe estar vacío';
                         }
                         return null;
                       },
-                      controller: _nameController, //onchangeText = setEmail
+                      controller: _nameController,
                       decoration: InputDecoration(
-                        //style = {{icon...}}
                         labelText: 'Nombre',
                         prefixIcon:
                             const Icon(Icons.perm_identity, color: customColor),
                         focusedBorder: OutlineInputBorder(
-                          //color del borde para cuando esta seleccionado
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: customColor,
@@ -113,7 +98,6 @@ class _SingUpPageState extends State<SingUpPage> {
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          //color del borde para cuando No esta seleccionado
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: customColor,
@@ -123,27 +107,22 @@ class _SingUpPageState extends State<SingUpPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  const SizedBox(width: 16),
                   SizedBox(
                     width: 392,
                     child: TextFormField(
                       validator: (value) {
-                        // Se fija si hay algo escrito
                         if (value == null || value.isEmpty) {
                           return 'El campo no debe estar vacío';
                         }
                         return null;
                       },
-                      controller: _lastNameController, //onchangeText = setEmail
+                      controller: _lastNameController,
                       decoration: InputDecoration(
-                        //style = {{icon...}}
                         labelText: 'Apellido',
                         prefixIcon:
                             const Icon(Icons.perm_identity, color: customColor),
                         focusedBorder: OutlineInputBorder(
-                          //color del borde para cuando esta seleccionado
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: customColor,
@@ -151,7 +130,6 @@ class _SingUpPageState extends State<SingUpPage> {
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          //color del borde para cuando No esta seleccionado
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: customColor,
@@ -167,7 +145,6 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: 800,
                   child: TextFormField(
                     validator: (value) {
-                      // Se fija si hay algo escrito
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
@@ -175,12 +152,10 @@ class _SingUpPageState extends State<SingUpPage> {
                     },
                     controller: _dniController,
                     decoration: InputDecoration(
-                      //style = {{icon...}}
                       labelText: 'DNI',
                       prefixIcon:
                           const Icon(Icons.card_membership, color: customColor),
                       focusedBorder: OutlineInputBorder(
-                        //color del borde para cuando esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
                           color: customColor,
@@ -188,7 +163,6 @@ class _SingUpPageState extends State<SingUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        //color del borde para cuando No esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
                           color: customColor.withOpacity(0.5),
@@ -203,7 +177,6 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: 800,
                   child: TextFormField(
                     validator: (value) {
-                      // Se fija si hay algo escrito
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
@@ -211,12 +184,10 @@ class _SingUpPageState extends State<SingUpPage> {
                     },
                     controller: _passwordController,
                     decoration: InputDecoration(
-                      //style = {{icon...}}
                       labelText: 'Clave',
                       prefixIcon:
                           const Icon(Icons.password, color: customColor),
                       focusedBorder: OutlineInputBorder(
-                        //color del borde para cuando esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
                           color: customColor,
@@ -224,7 +195,6 @@ class _SingUpPageState extends State<SingUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        //color del borde para cuando No esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
                           color: customColor.withOpacity(0.5),
@@ -232,7 +202,7 @@ class _SingUpPageState extends State<SingUpPage> {
                         ),
                       ),
                     ),
-                    obscureText: true, //ocultar clave
+                    obscureText: true, // ocultar clave
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -240,7 +210,6 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: 800,
                   child: TextFormField(
                     validator: (value) {
-                      // Se fija si hay algo escrito
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
@@ -248,11 +217,9 @@ class _SingUpPageState extends State<SingUpPage> {
                     },
                     controller: _phoneController,
                     decoration: InputDecoration(
-                      //style = {{icon...}}
                       labelText: 'Numero de telefono',
                       prefixIcon: const Icon(Icons.phone, color: customColor),
                       focusedBorder: OutlineInputBorder(
-                        //color del borde para cuando esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
                           color: customColor,
@@ -260,7 +227,6 @@ class _SingUpPageState extends State<SingUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        //color del borde para cuando No esta seleccionado
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
                           color: customColor.withOpacity(0.5),
@@ -276,16 +242,13 @@ class _SingUpPageState extends State<SingUpPage> {
                   child: ElevatedButton(
                     onPressed: () => _signUp(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFF8FFF7C), // Color de fondo 8FFF7C
-                      foregroundColor: Colors.black, // Color del texto
+                      backgroundColor: const Color(0xFF8FFF7C),
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 14.0),
-                      // Espaciado interno
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Bordes redondeados
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 6, // Sombra del botón
+                      elevation: 6,
                     ),
                     child: const Text(
                       'Crear cuenta',
@@ -303,11 +266,9 @@ class _SingUpPageState extends State<SingUpPage> {
   }
 
   Future<void> _signUp(BuildContext context) async {
-    // Si se valido correctamente el formulario
     if (_formKey.currentState!.validate()) {
-      // Guardar el nombre en el almacenamiento local
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', _nameController.text);
+      await prefs.setString('email', _emailController.text);
       await prefs.setString('name', _nameController.text);
       await prefs.setString('lastName', _lastNameController.text);
       await prefs.setString('dni', _dniController.text);
