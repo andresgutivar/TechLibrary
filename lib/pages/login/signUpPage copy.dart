@@ -1,15 +1,7 @@
 import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class SingUpPage extends StatefulWidget {
-  const SingUpPage({super.key});
-
-  @override
-  State<SingUpPage> createState() => _SingUpPageState();
-}
-
-class _SingUpPageState extends State<SingUpPage> {
+class SingUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -17,19 +9,18 @@ class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
-  final _formKey = GlobalKey<FormState>();
+
+  SingUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Volver"),
         backgroundColor: customColor,
       ),
       body: Form(
-        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
@@ -47,19 +38,9 @@ class _SingUpPageState extends State<SingUpPage> {
                   width: 800,
                   child: TextFormField(
                     validator: (value) {
-                      // Se fija si hay algo escrito
                       if (value == null || value.isEmpty) {
-                        return 'El campo no debe estar vacío';
+                        return 'Please enter some text';
                       }
-
-                      // Se fija si es un email valido
-                      String pattern =
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                      RegExp regex = RegExp(pattern);
-                      if (!regex.hasMatch(value)) {
-                        return 'El correo electrónico debe ser válido';
-                      }
-
                       return null;
                     },
                     controller: _emailController, //onchangeText = setEmail
@@ -90,14 +71,7 @@ class _SingUpPageState extends State<SingUpPage> {
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SizedBox(
                     width: 392,
-                    child: TextFormField(
-                      validator: (value) {
-                        // Se fija si hay algo escrito
-                        if (value == null || value.isEmpty) {
-                          return 'El campo no debe estar vacío';
-                        }
-                        return null;
-                      },
+                    child: TextField(
                       controller: _nameController, //onchangeText = setEmail
                       decoration: InputDecoration(
                         //style = {{icon...}}
@@ -128,14 +102,7 @@ class _SingUpPageState extends State<SingUpPage> {
                   ),
                   SizedBox(
                     width: 392,
-                    child: TextFormField(
-                      validator: (value) {
-                        // Se fija si hay algo escrito
-                        if (value == null || value.isEmpty) {
-                          return 'El campo no debe estar vacío';
-                        }
-                        return null;
-                      },
+                    child: TextField(
                       controller: _lastNameController, //onchangeText = setEmail
                       decoration: InputDecoration(
                         //style = {{icon...}}
@@ -165,14 +132,7 @@ class _SingUpPageState extends State<SingUpPage> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
-                  child: TextFormField(
-                    validator: (value) {
-                      // Se fija si hay algo escrito
-                      if (value == null || value.isEmpty) {
-                        return 'El campo no debe estar vacío';
-                      }
-                      return null;
-                    },
+                  child: TextField(
                     controller: _dniController,
                     decoration: InputDecoration(
                       //style = {{icon...}}
@@ -201,14 +161,7 @@ class _SingUpPageState extends State<SingUpPage> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
-                  child: TextFormField(
-                    validator: (value) {
-                      // Se fija si hay algo escrito
-                      if (value == null || value.isEmpty) {
-                        return 'El campo no debe estar vacío';
-                      }
-                      return null;
-                    },
+                  child: TextField(
                     controller: _passwordController,
                     decoration: InputDecoration(
                       //style = {{icon...}}
@@ -238,14 +191,7 @@ class _SingUpPageState extends State<SingUpPage> {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
-                  child: TextFormField(
-                    validator: (value) {
-                      // Se fija si hay algo escrito
-                      if (value == null || value.isEmpty) {
-                        return 'El campo no debe estar vacío';
-                      }
-                      return null;
-                    },
+                  child: TextField(
                     controller: _phoneController,
                     decoration: InputDecoration(
                       //style = {{icon...}}
@@ -302,19 +248,8 @@ class _SingUpPageState extends State<SingUpPage> {
     );
   }
 
-  Future<void> _signUp(BuildContext context) async {
-    // Si se valido correctamente el formulario
-    if (_formKey.currentState!.validate()) {
-      // Guardar el nombre en el almacenamiento local
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', _nameController.text);
-      await prefs.setString('name', _nameController.text);
-      await prefs.setString('lastName', _lastNameController.text);
-      await prefs.setString('dni', _dniController.text);
-      await prefs.setString('phone', _phoneController.text);
-
-      authService.signUp(
-          context, _emailController.text, _passwordController.text);
-    }
+  void _signUp(BuildContext context) {
+    authService.signUp(
+        context, _emailController.text, _passwordController.text);
   }
 }

@@ -8,6 +8,8 @@ import 'pages/home/homePage.dart';
 import 'pages/login/recoverAccountPage.dart';
 import 'pages/login/signUpPage.dart';
 import 'pages/home/RegisterbookPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +21,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final db = FirebaseFirestore.instance;
   final AuthenticationService authService = AuthenticationService();
 
   MyApp({super.key});
@@ -28,8 +31,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> signOut(BuildContext context) async {
+    Future<void> signOut() async {
       await FirebaseAuth.instance.signOut();
+    }
+
+    void saveUserInfo(String uid, String email, String name, String lastName,
+        String dni, String phone) async {
+      final data = {
+        'uid': uid,
+        'email': email,
+        'name': name,
+        'lastName': lastName,
+        'dni': dni,
+        'phone': phone,
+      };
+      db.collection("users").add(data).then((documentSnapshot) {
+        signOut();
+      });
     }
 
     return MaterialApp(
@@ -48,7 +66,15 @@ class MyApp extends StatelessWidget {
               if (snapshot.data!.emailVerified) {
                 return const HomePage();
               } else {
-                signOut(context);
+                SharedPreferences.getInstance().then((prefs) {
+                  String uid = snapshot.data!.uid;
+                  String email = prefs.getString('email')!;
+                  String name = prefs.getString('name')!;
+                  String lastName = prefs.getString('lastName')!;
+                  String dni = prefs.getString('dni')!;
+                  String phone = prefs.getString('phone')!;
+                  saveUserInfo(uid, email, name, lastName, dni, phone);
+                });
                 return LoginPage();
               }
             } else {
