@@ -192,7 +192,7 @@ class myAppBarWidget extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          // Acción al agregar usuario
+                          Navigator.pushNamed(context, '/registerUser');
                         },
                         child: const Text('Agregar usuario'),
                       ),
