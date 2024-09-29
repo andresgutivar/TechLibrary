@@ -50,7 +50,9 @@ class AuthenticationService {
     } catch (e) {
       // Handle sign-in errors (e.g., invalid credentials)
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error signing in. Please try again.')),
+        const SnackBar(
+            content: Text(
+                'Error en el inicio de sesión. Intente de nuevo por favor.')),
       );
     }
   }
@@ -65,14 +67,14 @@ class AuthenticationService {
       // Step 3: Show feedback to the user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Check your email to reset your password')),
+            content: Text('Revisa tu email para el recupero de la clave')),
       );
       // Optionally, navigate to the login page after showing the message
       Navigator.of(context).pushNamed('/login');
     } catch (e) {
       // Handle errors, e.g., show an error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error sending reset email: $e')),
+        SnackBar(content: Text('Error enviando el email de recupero: $e')),
       );
     }
   }
