@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
             // If the snapshot has data, it means a user is logged in
             if (snapshot.data != null) {
               if (snapshot.data!.emailVerified) {
-                return const HomePage();
+                return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {
                   String uid = snapshot.data!.uid;
