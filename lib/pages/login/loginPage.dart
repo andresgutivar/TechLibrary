@@ -1,5 +1,6 @@
 import 'package:biblioteca/services/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart'; //para verificar cuando se da click al texto de "recuperala"
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,14 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // check if it is debug mode
+    if (kDebugMode) {
+      authService.signInWithEmailAndPassword(
+          context, "bertolini.diego@gmail.com", "123123123");
+    }
+
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
