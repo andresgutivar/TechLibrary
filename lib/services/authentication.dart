@@ -2,13 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationService {
-  void signUp(BuildContext context, String emailController,
-      String passwordController) async {
+  void signUp(BuildContext context, String email, String password) async {
     try {
       final UserCredential result =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController,
-        password: passwordController,
+        email: email,
+        password: password,
       );
       final User user = result.user!;
 
@@ -30,13 +29,13 @@ class AuthenticationService {
     }
   }
 
-  void signInWithEmailAndPassword(BuildContext context, String emailController,
-      String passwordController) async {
+  void signInWithEmailAndPassword(
+      BuildContext context, String email, String password) async {
     try {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController,
-        password: passwordController,
+        email: email,
+        password: password,
       );
       if (userCredential.user != null &&
           userCredential.user!.emailVerified == false) {
@@ -57,11 +56,10 @@ class AuthenticationService {
     }
   }
 
-  void requestRecovery(BuildContext context, String emailController) async {
+  void requestRecovery(BuildContext context, String email) async {
     try {
       // Assuming you're using Firebase Auth, it would look something like this:
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailController);
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       // For demonstration, replace the above line with your actual implementation
 
       // Step 3: Show feedback to the user

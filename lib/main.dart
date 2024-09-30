@@ -1,3 +1,5 @@
+import 'package:biblioteca/pages/home/view_user_detail.dart';
+import 'package:biblioteca/pages/home/view_users.dart';
 import 'package:biblioteca/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +100,8 @@ class MyApp extends StatelessWidget {
         '/signUp': (context) => SingUpPage(),
         '/registerBook': (context) => RegisterbookPage(),
         '/registerUser': (context) => RegisterUserPage(),
+        '/viewUsers': (context) => ViewUsers(),
+        '/viewUserDetail': (context) => ViewUserDetail(),
       },
     );
   }

@@ -210,7 +210,7 @@ class myAppBarWidget extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          // Acción al mostrar usuarios
+                          Navigator.pushNamed(context, '/viewUsers');
                         },
                         child: const Text('Usuarios'),
                       ),
