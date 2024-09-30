@@ -83,6 +83,14 @@ class SingUpPage extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return 'El campo no debe estar vacío';
                         }
+
+                        // Regex pattern to validate the name
+                        String namePattern = r"^[a-zA-Zà-ÿÀ-ß\s'-]+$";
+                        RegExp regex = RegExp(namePattern);
+                        if (!regex.hasMatch(value)) {
+                          return 'Por favor, ingrese un nombre válido';
+                        }
+
                         return null;
                       },
                       controller: _nameController,
@@ -115,6 +123,14 @@ class SingUpPage extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return 'El campo no debe estar vacío';
                         }
+
+                        // Regex pattern to validate the last name
+                        String namePattern = r"^[a-zA-Zà-ÿÀ-ß\s'-]+$";
+                        RegExp regex = RegExp(namePattern);
+                        if (!regex.hasMatch(value)) {
+                          return 'Por favor, ingrese un apellido válido';
+                        }
+
                         return null;
                       },
                       controller: _lastNameController,
@@ -148,6 +164,14 @@ class SingUpPage extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
+
+                      // Regex pattern to validate the DNI
+                      String dniPattern = r"^[0-9]{8,10}$";
+                      RegExp regex = RegExp(dniPattern);
+                      if (!regex.hasMatch(value)) {
+                        return 'Por favor, ingrese un DNI válido';
+                      }
+
                       return null;
                     },
                     controller: _dniController,
@@ -213,6 +237,14 @@ class SingUpPage extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'El campo no debe estar vacío';
                       }
+
+                      // Regex pattern to validate the phone number
+                      String phonePattern = r"^\+?[0-9]{7,15}$";
+                      RegExp regex = RegExp(phonePattern);
+                      if (!regex.hasMatch(value)) {
+                        return 'Por favor, ingrese un número de teléfono válido';
+                      }
+
                       return null;
                     },
                     controller: _phoneController,
