@@ -101,6 +101,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text('Autor: <AuthorBook> '),
                 Text('Code: <ISBN>'),
+                Text('Estado: <Prestado/disponible>'),
               ],
             ),
           ),
@@ -119,7 +120,9 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/editBook');
+                  },
                 ),
               ),
               Padding(
@@ -138,6 +141,19 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: ElevatedButton.icon(
+                  icon: const Icon(Icons.bookmark),
+                  label: const Text('Prestamo'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
                   icon: const Icon(Icons.info_outline),
                   label: const Text('Detalles'),
                   style: ElevatedButton.styleFrom(
@@ -145,7 +161,9 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/informationBook');
+                  },
                 ),
               ),
             ],

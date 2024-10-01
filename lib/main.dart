@@ -13,6 +13,8 @@ import 'pages/home/registerbookPage.dart';
 import 'pages/home/registerUserPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:biblioteca/pages/home/bookInformationPage.dart';
+import 'package:biblioteca/pages/home/editBookPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -102,6 +104,8 @@ class MyApp extends StatelessWidget {
         '/registerUser': (context) => RegisterUserPage(),
         '/viewUsers': (context) => ViewUsers(),
         '/viewUserDetail': (context) => ViewUserDetail(),
+        '/informationBook': (context) => BookInformationPage(),
+        '/editBook': (context) => Editbookpage(),
       },
     );
   }
