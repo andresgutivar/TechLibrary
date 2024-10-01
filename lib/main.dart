@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
         '/viewUsers': (context) => ViewUsers(),
         '/viewUserDetail': (context) => ViewUserDetail(),
         '/informationBook': (context) => BookInformationPage(),
-        '/editBook': (context) => Editbookpage(),
+        '/editBook': (context) => EditBookPage(),
       },
     );
   }

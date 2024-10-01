@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Para restringir entrada numérica
 
 class RegisterbookPage extends StatelessWidget {
   RegisterbookPage({super.key});
@@ -19,7 +20,6 @@ class RegisterbookPage extends StatelessWidget {
   final TextEditingController _notes = TextEditingController();
 
   void _registerBook(BuildContext context) {
-    // Verificar que todos los campos excepto notas estén completos
     if (_tittle.text.isEmpty ||
         _editorial.text.isEmpty ||
         _author.text.isEmpty ||
@@ -32,7 +32,6 @@ class RegisterbookPage extends StatelessWidget {
         _editingPlace.text.isEmpty ||
         _edition.text.isEmpty ||
         _yearEdition.text.isEmpty) {
-      // Mostrar un mensaje de error si faltan campos
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor, completa todos los campos obligatorios.'),
@@ -41,8 +40,22 @@ class RegisterbookPage extends StatelessWidget {
       return;
     }
 
-    // Si todos los campos están completos, navegar a la página principal
     Navigator.pushNamed(context, '/home');
+  }
+
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      controller.text =
+          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    }
   }
 
   @override
@@ -72,8 +85,14 @@ class RegisterbookPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildTextField(_location, 'Ubicación', Icons.map, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_entryDate, 'Fecha de ingreso',
-                    Icons.calendar_month, customColor),
+                _buildTextField(
+                  _entryDate,
+                  'Fecha de ingreso',
+                  Icons.calendar_month,
+                  customColor,
+                  isDateField: true,
+                  context: context,
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(_primaryDescriptor, 'Descriptor primario',
                     Icons.star, customColor),
@@ -81,24 +100,39 @@ class RegisterbookPage extends StatelessWidget {
                 _buildTextField(_secondaryDescriptor, 'Descriptor secundario',
                     Icons.star_half, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_numberPages, 'Cantidad de paginas',
-                    Icons.auto_stories, customColor),
+                _buildTextField(
+                  _numberPages,
+                  'Cantidad de páginas',
+                  Icons.auto_stories,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _isbnCode, 'Codigo ISBN', Icons.vpn_key, customColor),
+                  _isbnCode,
+                  'Código ISBN',
+                  Icons.vpn_key,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
-                _buildTextField(_editingPlace, 'Lugar de edicion',
+                _buildTextField(_editingPlace, 'Lugar de edición',
                     Icons.location_on, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_edition, 'Edicion', Icons.tag, customColor),
+                _buildTextField(_edition, 'Edición', Icons.tag, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _yearEdition, 'Año de edicion', Icons.event, customColor),
+                  _yearEdition,
+                  'Año de edición',
+                  Icons.event,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    controller: _notes, // Controlador del correo
+                    controller: _notes,
                     maxLines: 5,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
@@ -152,12 +186,20 @@ class RegisterbookPage extends StatelessWidget {
 
   Widget _buildTextField(TextEditingController controller, String labelText,
       IconData icon, Color color,
-      {int maxLines = 1}) {
+      {int maxLines = 1,
+      bool isDateField = false,
+      BuildContext? context,
+      bool isNumeric = false}) {
     return SizedBox(
       width: 800,
       child: TextField(
         controller: controller,
         maxLines: maxLines,
+        readOnly: isDateField,
+        keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+        inputFormatters: isNumeric
+            ? [FilteringTextInputFormatter.digitsOnly]
+            : null, // Solo permitir números si es necesario
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: Icon(icon, color: color),
@@ -170,6 +212,9 @@ class RegisterbookPage extends StatelessWidget {
             borderSide: BorderSide(color: color.withOpacity(0.5), width: 2),
           ),
         ),
+        onTap: isDateField && context != null
+            ? () => _selectDate(context, controller)
+            : null,
       ),
     );
   }

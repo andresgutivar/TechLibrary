@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Importar para los formatters
 
 class RegisterUserPage extends StatelessWidget {
   RegisterUserPage({super.key});
@@ -83,10 +84,21 @@ class RegisterUserPage extends StatelessWidget {
                 _buildTextField(
                     _lastName, 'Apellido', Icons.title_outlined, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_dni, 'DNI', Icons.title_outlined, customColor),
+                _buildTextField(
+                  _dni,
+                  'DNI',
+                  Icons.title_outlined,
+                  customColor,
+                  isNumeric: true, // Validar que sea numérico
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _phone, 'Teléfono', Icons.phone_outlined, customColor),
+                  _phone,
+                  'Teléfono',
+                  Icons.phone_outlined,
+                  customColor,
+                  isNumeric: true, // Validar que sea numérico
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(
                     _address, 'Dirección', Icons.home_outlined, customColor),
@@ -162,12 +174,16 @@ class RegisterUserPage extends StatelessWidget {
 
   Widget _buildTextField(TextEditingController controller, String labelText,
       IconData icon, Color color,
-      {int maxLines = 1}) {
+      {int maxLines = 1, bool isNumeric = false}) {
     return SizedBox(
       width: 800,
       child: TextField(
         controller: controller,
         maxLines: maxLines,
+        keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+        inputFormatters: isNumeric
+            ? [FilteringTextInputFormatter.digitsOnly] // Solo permitir números
+            : null,
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: Icon(icon, color: color),

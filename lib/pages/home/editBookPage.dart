@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Importar para los formatters
 
-class Editbookpage extends StatelessWidget {
-  Editbookpage({super.key});
+class EditBookPage extends StatelessWidget {
+  EditBookPage({super.key});
 
   // Controladores de texto
-  final TextEditingController _tittle = TextEditingController(text: "titulo");
+  final TextEditingController _title = TextEditingController(text: "titulo");
   final TextEditingController _editorial =
       TextEditingController(text: 'editorial');
   final TextEditingController _author = TextEditingController(text: 'autor');
@@ -14,22 +15,20 @@ class Editbookpage extends StatelessWidget {
       TextEditingController(text: '12/12/2000');
   final TextEditingController _primaryDescriptor =
       TextEditingController(text: 'ficcion');
-  final TextEditingController _numberPages =
-      TextEditingController(text: 'goool');
-  final TextEditingController _isbnCode = TextEditingController(text: 'goool');
+  final TextEditingController _numberPages = TextEditingController(text: '0');
+  final TextEditingController _isbnCode = TextEditingController(text: '0');
   final TextEditingController _secondaryDescriptor =
       TextEditingController(text: 'goool');
   final TextEditingController _editingPlace =
       TextEditingController(text: 'goool');
   final TextEditingController _edition = TextEditingController(text: 'goool');
-  final TextEditingController _yearEdition =
-      TextEditingController(text: 'goool');
+  final TextEditingController _yearEdition = TextEditingController(text: '0');
   final TextEditingController _notes =
       TextEditingController(text: 'goooll de river');
 
   void _registerBook(BuildContext context) {
     // Verificar que todos los campos excepto notas estén completos
-    if (_tittle.text.isEmpty ||
+    if (_title.text.isEmpty ||
         _editorial.text.isEmpty ||
         _author.text.isEmpty ||
         _location.text.isEmpty ||
@@ -54,12 +53,26 @@ class Editbookpage extends StatelessWidget {
     Navigator.pushNamed(context, '/home');
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      _entryDate.text =
+          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Libro'),
+        title: const Text('Registrar Libro'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -71,18 +84,24 @@ class Editbookpage extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _tittle, 'Titulo', Icons.title_outlined, customColor),
+                    _title, 'Título', Icons.title_outlined, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _editorial, 'Editorial', Icons.numbers, customColor),
+                    _editorial, 'Editorial', Icons.book, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
                     _author, 'Autor/Autora', Icons.person, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(_location, 'Ubicación', Icons.map, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_entryDate, 'Fecha de ingreso',
-                    Icons.calendar_month, customColor),
+                _buildTextField(
+                  _entryDate,
+                  'Fecha de ingreso',
+                  Icons.calendar_today,
+                  customColor,
+                  isDateField: true,
+                  context: context,
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(_primaryDescriptor, 'Descriptor primario',
                     Icons.star, customColor),
@@ -90,31 +109,46 @@ class Editbookpage extends StatelessWidget {
                 _buildTextField(_secondaryDescriptor, 'Descriptor secundario',
                     Icons.star_half, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_numberPages, 'Cantidad de paginas',
-                    Icons.auto_stories, customColor),
+                _buildTextField(
+                  _numberPages,
+                  'Cantidad de páginas',
+                  Icons.auto_stories,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _isbnCode, 'Codigo ISBN', Icons.vpn_key, customColor),
+                  _isbnCode,
+                  'Código ISBN',
+                  Icons.vpn_key,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
-                _buildTextField(_editingPlace, 'Lugar de edicion',
+                _buildTextField(_editingPlace, 'Lugar de edición',
                     Icons.location_on, customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_edition, 'Edicion', Icons.tag, customColor),
+                _buildTextField(_edition, 'Edición', Icons.edit, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _yearEdition, 'Año de edicion', Icons.event, customColor),
+                  _yearEdition,
+                  'Año de edición',
+                  Icons.event,
+                  customColor,
+                  isNumeric: true,
+                ),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 800,
                   child: TextField(
-                    controller: _notes, // Controlador del correo
+                    controller: _notes,
                     maxLines: 5,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       labelText: 'Notas',
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
+                        borderSide: BorderSide(
                           color: customColor,
                           width: 2,
                         ),
@@ -144,7 +178,7 @@ class Editbookpage extends StatelessWidget {
                       elevation: 6,
                     ),
                     child: const Text(
-                      'Editar libro',
+                      'Registrar libro',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -161,12 +195,22 @@ class Editbookpage extends StatelessWidget {
 
   Widget _buildTextField(TextEditingController controller, String labelText,
       IconData icon, Color color,
-      {int maxLines = 1}) {
+      {int maxLines = 1,
+      bool isDateField = false,
+      BuildContext? context,
+      bool isNumeric = false}) {
     return SizedBox(
       width: 800,
       child: TextField(
         controller: controller,
         maxLines: maxLines,
+        readOnly: isDateField,
+        keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+        inputFormatters: isNumeric
+            ? [
+                FilteringTextInputFormatter.digitsOnly
+              ] // Solo permitir números si es necesario
+            : null,
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: Icon(icon, color: color),
@@ -179,6 +223,9 @@ class Editbookpage extends StatelessWidget {
             borderSide: BorderSide(color: color.withOpacity(0.5), width: 2),
           ),
         ),
+        onTap: isDateField && context != null
+            ? () => _selectDate(context) // Al tocar, abrir el DatePicker
+            : null,
       ),
     );
   }

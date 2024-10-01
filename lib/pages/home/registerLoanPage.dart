@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import necesario para los inputFormatters
 
 class RegisterLoanPage extends StatelessWidget {
   RegisterLoanPage({super.key, required this.codigoISBN});
@@ -75,10 +76,11 @@ class RegisterLoanPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildInputField(
                   _dni,
-                  'DNI',
-                  Icons.title_outlined,
+                  'DNI de usuario',
+                  Icons.perm_identity,
                   customColor,
                   false,
+                  isNumeric: true, // Configurado para aceptar solo números
                 ),
                 const SizedBox(height: 16),
                 _buildInputField(
@@ -158,13 +160,22 @@ class RegisterLoanPage extends StatelessWidget {
 
   Widget _buildInputField(TextEditingController controller, String labelText,
       IconData icon, Color color, bool read,
-      {int maxLines = 1, bool isDateField = false, BuildContext? context}) {
+      {int maxLines = 1,
+      bool isDateField = false,
+      bool isNumeric = false,
+      BuildContext? context}) {
     return SizedBox(
       width: 800,
       child: TextField(
         controller: controller,
         maxLines: maxLines,
         readOnly: read || isDateField,
+        keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+        inputFormatters: isNumeric
+            ? <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly, // Solo números
+              ]
+            : null,
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: Icon(icon, color: color),
@@ -178,8 +189,8 @@ class RegisterLoanPage extends StatelessWidget {
           ),
         ),
         onTap: isDateField && context != null
-            ? () => _selectDate(
-                context, controller) // Al tocar, abrir el DatePicker
+            ? () =>
+                _selectDate(context, controller) // Abrir DatePicker al tocar
             : null,
       ),
     );
