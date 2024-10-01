@@ -148,7 +148,15 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navegar a RegisterLoanPage pasando un código ISBN
+                    Navigator.pushNamed(
+                      context,
+                      '/registerLoan',
+                      arguments:
+                          'holasa', // Por ejemplo, el código ISBN del libro
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -264,7 +272,6 @@ class myAppBarWidget extends StatelessWidget {
                   icon: const Icon(Icons.logout_outlined),
                   color: Colors.black,
                   onPressed: () {
-                    // Acción al agregar libro
                     _authService.signOut(context);
                   }, // Acción al cerrar sesión
 

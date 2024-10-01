@@ -23,7 +23,6 @@ class LoginPage extends StatelessWidget {
 
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
 
-
     void _login() {
       print("llega");
       if (_formKey.currentState!.validate()) {
@@ -31,7 +30,6 @@ class LoginPage extends StatelessWidget {
             context, _emailController.text, _passwordController.text);
       }
     }
-
 
     return Scaffold(
       body: Form(

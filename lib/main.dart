@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biblioteca/pages/home/bookInformationPage.dart';
 import 'package:biblioteca/pages/home/editBookPage.dart';
+import 'package:biblioteca/pages/home/registerLoanPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,6 +96,19 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      // Modificamos aquí para manejar rutas con argumentos
+      onGenerateRoute: (settings) {
+        if (settings.name == '/registerLoan') {
+          final String codigoISBN = settings.arguments as String;
+          return MaterialPageRoute(
+            builder: (context) {
+              return RegisterLoanPage(codigoISBN: codigoISBN);
+            },
+          );
+        }
+        //Aquí pueden manejarse otras rutas si es necesario
+        return null;
+      },
       routes: {
         '/login': (context) => LoginPage(),
         '/home': (context) => const HomePage(),
