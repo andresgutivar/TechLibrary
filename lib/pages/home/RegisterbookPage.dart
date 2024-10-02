@@ -18,6 +18,7 @@ class RegisterbookPage extends StatelessWidget {
   final TextEditingController _edition = TextEditingController();
   final TextEditingController _yearEdition = TextEditingController();
   final TextEditingController _notes = TextEditingController();
+  //final TextEditingController _status = TextEditingController(text: "disponible"); //este dato de debe guardar como "disponible autonamitacamente"
 
   void _registerBook(BuildContext context) {
     if (_tittle.text.isEmpty ||
@@ -39,7 +40,7 @@ class RegisterbookPage extends StatelessWidget {
       );
       return;
     }
-
+    //guardamos los datos en la base de datos
     Navigator.pushNamed(context, '/home');
   }
 
@@ -105,7 +106,6 @@ class RegisterbookPage extends StatelessWidget {
                   'Cantidad de páginas',
                   Icons.auto_stories,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
@@ -113,7 +113,6 @@ class RegisterbookPage extends StatelessWidget {
                   'Código ISBN',
                   Icons.vpn_key,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(_editingPlace, 'Lugar de edición',
@@ -126,7 +125,6 @@ class RegisterbookPage extends StatelessWidget {
                   'Año de edición',
                   Icons.event,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -184,22 +182,21 @@ class RegisterbookPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String labelText,
-      IconData icon, Color color,
-      {int maxLines = 1,
-      bool isDateField = false,
-      BuildContext? context,
-      bool isNumeric = false}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String labelText,
+    IconData icon,
+    Color color, {
+    int maxLines = 1,
+    bool isDateField = false,
+    BuildContext? context,
+  }) {
     return SizedBox(
       width: 800,
       child: TextField(
         controller: controller,
         maxLines: maxLines,
         readOnly: isDateField,
-        keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
-        inputFormatters: isNumeric
-            ? [FilteringTextInputFormatter.digitsOnly]
-            : null, // Solo permitir números si es necesario
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: Icon(icon, color: color),

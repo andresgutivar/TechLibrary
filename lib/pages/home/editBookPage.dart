@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Importar para los formatters
+import 'package:intl/intl.dart';
 
 class EditBookPage extends StatelessWidget {
   EditBookPage({super.key, required this.book});
 
   final Map<String, dynamic> book;
-  //print(book);
+
   // Controladores de texto
   final TextEditingController _title = TextEditingController();
   final TextEditingController _editorial = TextEditingController();
@@ -13,7 +15,7 @@ class EditBookPage extends StatelessWidget {
   final TextEditingController _location = TextEditingController();
   final TextEditingController _entryDate = TextEditingController();
   final TextEditingController _primaryDescriptor = TextEditingController();
-  final TextEditingController _numberPages = TextEditingController();
+  final TextEditingController _pagination = TextEditingController();
   final TextEditingController _isbnCode = TextEditingController();
   final TextEditingController _secondaryDescriptor = TextEditingController();
   final TextEditingController _editingPlace = TextEditingController();
@@ -29,7 +31,7 @@ class EditBookPage extends StatelessWidget {
         _location.text.isEmpty ||
         _entryDate.text.isEmpty ||
         _primaryDescriptor.text.isEmpty ||
-        _numberPages.text.isEmpty ||
+        _pagination.text.isEmpty ||
         _isbnCode.text.isEmpty ||
         _secondaryDescriptor.text.isEmpty ||
         _editingPlace.text.isEmpty ||
@@ -51,34 +53,44 @@ class EditBookPage extends StatelessWidget {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime.tryParse(_entryDate.text) ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
 
     if (pickedDate != null) {
-      _entryDate.text =
-          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      _entryDate.text = DateFormat('dd/MM/yyyy').format(pickedDate);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _title.text = book["title"];
-    _author.text = book["author"];
-    _editingPlace.text = book["editingPlace"];
-    _edition.text = book["edition"];
-    _editorial.text = book["editorial"];
-    //_entryDate.text = book["entryDate"];
-    _isbnCode.text = book["isbn"];
-    _location.text = book["location"];
-    _notes.text = book["notes"];
-    _numberPages.text = book["pagination"];
-    _primaryDescriptor.text = book["primaryDescriptor"];
-    _secondaryDescriptor.text = book["secondaryDescriptor"];
-    _yearEdition.text = book["yearEdition"];
-    print("Contenido del libro: $book");
+    _title.text = book["title"] ?? '';
+    _author.text = book["author"] ?? '';
+    _editingPlace.text = book["editingPlace"] ?? '';
+    _edition.text = book["edition"] ?? '';
+    _editorial.text = book["editorial"] ?? '';
+
+    // Manejar entryDate
+    if (book["entryDate"] != null) {
+      if (book["entryDate"] is Timestamp) {
+        DateTime entryDate = (book["entryDate"] as Timestamp).toDate();
+        _entryDate.text = DateFormat('dd/MM/yyyy').format(entryDate);
+      } else if (book["entryDate"] is String) {
+        _entryDate.text = book["entryDate"];
+      }
+    }
+
+    _isbnCode.text = book["isbn"] ?? '';
+    _location.text = book["location"] ?? '';
+    _notes.text = book["notes"] ?? '';
+    _pagination.text = book["pagination"] ?? '';
+    _primaryDescriptor.text = book["primaryDescriptor"] ?? '';
+    _secondaryDescriptor.text = book["secondaryDescriptor"] ?? '';
+    _yearEdition.text = book["yearEdition"] ?? '';
+
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
+    //print(book);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrar Libro'),
@@ -119,8 +131,8 @@ class EditBookPage extends StatelessWidget {
                     Icons.star_half, customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  _numberPages,
-                  'Cantidad de páginas',
+                  _pagination,
+                  'Paginacion',
                   Icons.auto_stories,
                   customColor,
                 ),

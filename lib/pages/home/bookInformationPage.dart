@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BookInformationPage extends StatelessWidget {
-  BookInformationPage({super.key});
-
+  BookInformationPage({super.key, required this.book});
+  final Map<String, dynamic> book;
   @override
   Widget build(BuildContext context) {
     const Color customColor = Color(0xfff8FFF7C);
@@ -19,51 +19,74 @@ class BookInformationPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // SizedBox que contiene el texto con el estilo deseado
-                MyText(text: 'Titulo', value: '', customColor: customColor),
+                MyText(
+                    text: 'Titulo',
+                    value: book['title'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
-                MyText(text: 'Autor', value: '', customColor: customColor),
+                MyText(
+                    text: 'Autor',
+                    value: book['author'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
 
                 MyText(
-                    text: 'Codigo ISBN', value: '', customColor: customColor),
+                    text: 'Codigo ISBN',
+                    value: book['isbn'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
 
-                MyText(text: 'Estado', value: '', customColor: customColor),
+                MyText(
+                    text: 'Estado',
+                    value: book['status'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
 
-                MyText(text: 'Paginacion', value: '', customColor: customColor),
+                MyText(
+                    text: 'Paginacion',
+                    value: book['pagination'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
 
-                MyText(text: 'Editorial', value: '', customColor: customColor),
+                MyText(
+                    text: 'Editorial',
+                    value: book['editorial'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
-                MyText(text: 'Edicion', value: '', customColor: customColor),
+                MyText(
+                    text: 'Edicion',
+                    value: book['edition'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
                     text: 'Lugar de edicion',
-                    value: '',
+                    value: book['editingPlace'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
                     text: 'Anio de edicion',
-                    value: '',
+                    value: book['yearEdition'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
                     text: 'Ubicacion fisica',
-                    value: '',
+                    value: book['location'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
                     text: 'Descriptor primario',
-                    value: '',
+                    value: book['primaryDescriptor'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
                     text: 'Descriptor secundario',
-                    value: '',
+                    value: book['secondaryDescriptor'],
                     customColor: customColor),
                 const SizedBox(height: 16),
-                MyText(text: 'Notas', value: '', customColor: customColor),
+                MyText(
+                    text: 'Notas',
+                    value: book['notes'],
+                    customColor: customColor),
                 const SizedBox(height: 16),
               ],
             ),

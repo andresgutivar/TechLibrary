@@ -205,7 +205,12 @@ class _HomePageState extends State<HomePage> {
                     elevation: 3,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/informationBook');
+                    // Navegar a RegisterLoanPage pasando un código ISBN
+                    Navigator.pushNamed(
+                      context,
+                      '/informationBook',
+                      arguments: book, // Por ejemplo, el código ISBN del libro
+                    );
                   },
                 ),
               ),

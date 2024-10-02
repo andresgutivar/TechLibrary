@@ -115,6 +115,15 @@ class MyApp extends StatelessWidget {
             },
           );
         }
+        if (settings.name == '/informationBook') {
+          final Map<String, dynamic> book =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return BookInformationPage(book: book);
+            },
+          );
+        }
 
         //Aquí pueden manejarse otras rutas si es necesario
         return null;
@@ -128,7 +137,7 @@ class MyApp extends StatelessWidget {
         '/registerUser': (context) => RegisterUserPage(),
         '/viewUsers': (context) => ViewUsers(),
         '/viewUserDetail': (context) => ViewUserDetail(),
-        '/informationBook': (context) => BookInformationPage(),
+        //'/informationBook': (context) => BookInformationPage(),
         //'/editBook': (context) => EditBookPage(),
       },
     );
