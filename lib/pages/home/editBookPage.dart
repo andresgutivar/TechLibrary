@@ -2,29 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Importar para los formatters
 
 class EditBookPage extends StatelessWidget {
-  EditBookPage({super.key});
+  EditBookPage({super.key, required this.book});
 
+  final Map<String, dynamic> book;
+  //print(book);
   // Controladores de texto
-  final TextEditingController _title = TextEditingController(text: "titulo");
-  final TextEditingController _editorial =
-      TextEditingController(text: 'editorial');
-  final TextEditingController _author = TextEditingController(text: 'autor');
-  final TextEditingController _location =
-      TextEditingController(text: 'locacion');
-  final TextEditingController _entryDate =
-      TextEditingController(text: '12/12/2000');
-  final TextEditingController _primaryDescriptor =
-      TextEditingController(text: 'ficcion');
-  final TextEditingController _numberPages = TextEditingController(text: '0');
-  final TextEditingController _isbnCode = TextEditingController(text: '0');
-  final TextEditingController _secondaryDescriptor =
-      TextEditingController(text: 'goool');
-  final TextEditingController _editingPlace =
-      TextEditingController(text: 'goool');
-  final TextEditingController _edition = TextEditingController(text: 'goool');
-  final TextEditingController _yearEdition = TextEditingController(text: '0');
-  final TextEditingController _notes =
-      TextEditingController(text: 'goooll de river');
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _editorial = TextEditingController();
+  final TextEditingController _author = TextEditingController();
+  final TextEditingController _location = TextEditingController();
+  final TextEditingController _entryDate = TextEditingController();
+  final TextEditingController _primaryDescriptor = TextEditingController();
+  final TextEditingController _numberPages = TextEditingController();
+  final TextEditingController _isbnCode = TextEditingController();
+  final TextEditingController _secondaryDescriptor = TextEditingController();
+  final TextEditingController _editingPlace = TextEditingController();
+  final TextEditingController _edition = TextEditingController();
+  final TextEditingController _yearEdition = TextEditingController();
+  final TextEditingController _notes = TextEditingController();
 
   void _registerBook(BuildContext context) {
     // Verificar que todos los campos excepto notas estén completos
@@ -69,6 +64,20 @@ class EditBookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _title.text = book["title"];
+    _author.text = book["author"];
+    _editingPlace.text = book["editingPlace"];
+    _edition.text = book["edition"];
+    _editorial.text = book["editorial"];
+    //_entryDate.text = book["entryDate"];
+    _isbnCode.text = book["isbn"];
+    _location.text = book["location"];
+    _notes.text = book["notes"];
+    _numberPages.text = book["pagination"];
+    _primaryDescriptor.text = book["primaryDescriptor"];
+    _secondaryDescriptor.text = book["secondaryDescriptor"];
+    _yearEdition.text = book["yearEdition"];
+    print("Contenido del libro: $book");
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +123,6 @@ class EditBookPage extends StatelessWidget {
                   'Cantidad de páginas',
                   Icons.auto_stories,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
@@ -122,7 +130,6 @@ class EditBookPage extends StatelessWidget {
                   'Código ISBN',
                   Icons.vpn_key,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(_editingPlace, 'Lugar de edición',
@@ -135,7 +142,6 @@ class EditBookPage extends StatelessWidget {
                   'Año de edición',
                   Icons.event,
                   customColor,
-                  isNumeric: true,
                 ),
                 const SizedBox(height: 16),
                 SizedBox(

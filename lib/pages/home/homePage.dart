@@ -1,6 +1,8 @@
 import 'package:biblioteca/services/authentication.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import './editBookPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +16,17 @@ class _HomePageState extends State<HomePage> {
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
 
   final _authService = AuthenticationService();
+
+  Stream<List<Map<String, dynamic>>> streamBooks() {
+    return FirebaseFirestore.instance
+        .collection('books')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+  }
 
   void _logOut() {
     //logica para cerrar sesion
@@ -38,8 +51,24 @@ class _HomePageState extends State<HomePage> {
             child: ListView(
               padding: const EdgeInsets.all(8.0),
               children: [
-                _buildExpansionTileCard(),
-                _buildExpansionTileCard(), // Aquí llamamos a nuestro método para crear la tarjeta
+                StreamBuilder<List<Map<String, dynamic>>>(
+                  stream: streamBooks(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text('No users found');
+                    } else {
+                      return Column(
+                        children: snapshot.data!.map((user) {
+                          return _buildExpansionTileCard(context, user);
+                        }).toList(),
+                      );
+                    }
+                  },
+                ), // Aquí llamamos a nuestro método para crear la tarjeta
               ],
             ),
           ),
@@ -80,28 +109,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildExpansionTileCard() {
+  Widget _buildExpansionTileCard(
+      BuildContext context, Map<String, dynamic> book) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ExpansionTileCard(
         baseColor: backgroundColorOptions,
         expandedColor: backgroundColorOptions,
-        title: const Text('<tittleBook>'),
-        subtitle: const Text('<descriptor primario>'),
+        title: Text(book['title']),
+        subtitle: Text('Descriptor primario : ' + book["primaryDescriptor"]),
         leading: const Icon(Icons.done),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
             height: 1.0,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Autor: <AuthorBook> '),
-                Text('Code: <ISBN>'),
-                Text('Estado: <Prestado/disponible>'),
+                Text("Autor :" + book["author"]),
+                Text("Cidigo ISBN :" + book["isbn"]),
+                Text("Estado :" + book["status"]),
               ],
             ),
           ),
@@ -121,7 +151,12 @@ class _HomePageState extends State<HomePage> {
                     elevation: 3,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/editBook');
+                    // Navegar a RegisterLoanPage pasando un código ISBN
+                    Navigator.pushNamed(
+                      context,
+                      '/editBookPage',
+                      arguments: book, // Por ejemplo, el código ISBN del libro
+                    );
                   },
                 ),
               ),

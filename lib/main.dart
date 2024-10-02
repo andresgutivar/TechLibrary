@@ -106,12 +106,22 @@ class MyApp extends StatelessWidget {
             },
           );
         }
+        if (settings.name == '/editBookPage') {
+          final Map<String, dynamic> book =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return EditBookPage(book: book);
+            },
+          );
+        }
+
         //Aquí pueden manejarse otras rutas si es necesario
         return null;
       },
       routes: {
         '/login': (context) => LoginPage(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) => HomePage(),
         '/recoverAccount': (context) => RecoverAccountPage(),
         '/signUp': (context) => SingUpPage(),
         '/registerBook': (context) => RegisterbookPage(),
@@ -119,7 +129,7 @@ class MyApp extends StatelessWidget {
         '/viewUsers': (context) => ViewUsers(),
         '/viewUserDetail': (context) => ViewUserDetail(),
         '/informationBook': (context) => BookInformationPage(),
-        '/editBook': (context) => EditBookPage(),
+        //'/editBook': (context) => EditBookPage(),
       },
     );
   }
