@@ -118,7 +118,9 @@ class _HomePageState extends State<HomePage> {
         expandedColor: backgroundColorOptions,
         title: Text(book['title']),
         subtitle: Text('Descriptor primario: ' + book["primaryDescriptor"]),
-        leading: const Icon(Icons.done),
+        leading: book["status"] == 'disponible'
+            ? const Icon(Icons.done)
+            : const Icon(Icons.close),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
