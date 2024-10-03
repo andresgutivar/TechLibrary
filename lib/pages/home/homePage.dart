@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
         baseColor: backgroundColorOptions,
         expandedColor: backgroundColorOptions,
         title: Text(book['title']),
-        subtitle: Text('Descriptor primario : ' + book["primaryDescriptor"]),
+        subtitle: Text('Descriptor primario: ' + book["primaryDescriptor"]),
         leading: const Icon(Icons.done),
         children: <Widget>[
           const Divider(
@@ -129,9 +129,9 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Autor :" + book["author"]),
-                Text("Cidigo ISBN :" + book["isbn"]),
-                Text("Estado :" + book["status"]),
+                Text("Autor: " + book["author"]),
+                Text("Código ISBN: " + book["isbn"]),
+                Text("Estado: " + book["status"]),
               ],
             ),
           ),
@@ -151,11 +151,10 @@ class _HomePageState extends State<HomePage> {
                     elevation: 3,
                   ),
                   onPressed: () {
-                    // Navegar a RegisterLoanPage pasando un código ISBN
                     Navigator.pushNamed(
                       context,
                       '/editBookPage',
-                      arguments: book, // Por ejemplo, el código ISBN del libro
+                      arguments: book,
                     );
                   },
                 ),
@@ -173,27 +172,49 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {},
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.bookmark),
-                  label: const Text('Prestamo'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: customColor,
-                    foregroundColor: Colors.black,
-                    elevation: 3,
+              // Condicional para mostrar diferentes botones según el estado del libro
+              if (book["status"] == "disponible")
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.bookmark),
+                    label: const Text('Préstamo'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customColor,
+                      foregroundColor: Colors.black,
+                      elevation: 3,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/registerLoan',
+                        arguments: book["isbn"],
+                      );
+                    },
                   ),
-                  onPressed: () {
-                    // Navegar a RegisterLoanPage pasando un código ISBN
-                    Navigator.pushNamed(
-                      context,
-                      '/registerLoan',
-                      arguments:
-                          'holasa', // Por ejemplo, el código ISBN del libro
-                    );
-                  },
+                )
+              else ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.info),
+                    label: const Text("prestamo"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customColor,
+                      foregroundColor: Colors.black,
+                      elevation: 3,
+                    ),
+                    onPressed: () {
+                      //marcar libro como disponible
+                      Navigator.pushNamed(
+                        context,
+                        '/informationLoan',
+                        arguments: book,
+                      );
+                    },
+                  ),
                 ),
-              ),
+              ],
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: ElevatedButton.icon(
@@ -205,11 +226,10 @@ class _HomePageState extends State<HomePage> {
                     elevation: 3,
                   ),
                   onPressed: () {
-                    // Navegar a RegisterLoanPage pasando un código ISBN
                     Navigator.pushNamed(
                       context,
                       '/informationBook',
-                      arguments: book, // Por ejemplo, el código ISBN del libro
+                      arguments: book,
                     );
                   },
                 ),

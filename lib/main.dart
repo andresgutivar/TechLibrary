@@ -16,6 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biblioteca/pages/home/bookInformationPage.dart';
 import 'package:biblioteca/pages/home/editBookPage.dart';
 import 'package:biblioteca/pages/home/registerLoanPage.dart';
+import 'package:biblioteca/pages/home/infoLoanPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -121,6 +122,15 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return BookInformationPage(book: book);
+            },
+          );
+        }
+        if (settings.name == '/informationLoan') {
+          final Map<String, dynamic> book =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return InfoLoanPage(book: book);
             },
           );
         }
