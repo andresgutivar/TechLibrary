@@ -1,17 +1,19 @@
-import 'package:biblioteca/models/user.dart';
-import 'package:biblioteca/pages/home/view_user_detail.dart';
+import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
+import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 
-class ViewUsers extends StatelessWidget {
-  const ViewUsers({super.key});
+class ViewUsersPage extends StatelessWidget {
+  const ViewUsersPage({super.key});
+  static const routeName = '/viewUsers';
+
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
 
   Stream<List<Map<String, dynamic>>> streamUsers() {
     return FirebaseFirestore.instance
-        .collection('users')
+        .collection('usersBook')
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
@@ -138,23 +140,19 @@ class ViewUsers extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: ElevatedButton.icon(
-                    icon: const Icon(Icons.info),
-                    label: const Text('Más información'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: customColor,
-                      foregroundColor: Colors.black,
-                      elevation: 3,
-                    ),
-                    onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewUserDetail(),
-                            settings: RouteSettings(
-                              arguments:
-                                  user, // Pass the User object as an argument
-                            ),
-                          ),
-                        )),
+                  icon: const Icon(Icons.info),
+                  label: const Text('Más información'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    ViewUserDetailPage.routeName,
+                    arguments: ViewUserDetailPageArguments(user['dni']),
+                  ),
+                ),
               ),
             ],
           ),
