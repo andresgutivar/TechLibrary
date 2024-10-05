@@ -1,4 +1,4 @@
-import 'package:biblioteca/models/user_book.dart';
+import 'package:biblioteca/models/user_book_model.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,24 +6,22 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 
 class ViewUsersPage extends StatelessWidget {
-  const ViewUsersPage({super.key});
   static const routeName = '/viewUsers';
 
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
-  static const Color backgroundColorOptions = Color(0xfff8FFF7C);
+  static const Color backgroundColorOptions = Color.fromRGBO(143, 255, 124, 1);
+
+  const ViewUsersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Stream<List<UserBook>> streamUsers() {
-      return FirebaseFirestore.instance
-          .collection('usersBook')
-          .snapshots()
-          .map((snapshot) {
-        return snapshot.docs
-            .map((doc) => UserBook.fromMap(doc.data()))
-            .toList();
-      });
-    }
+    final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance
+        .collection('usersBook')
+        .withConverter(
+          fromFirestore: UserBookModel.fromFirestore,
+          toFirestore: (UserBookModel user, options) => user.toFirestore(),
+        )
+        .snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -41,20 +39,26 @@ class ViewUsersPage extends StatelessWidget {
                 SizedBox(height: 16),
                 _buildSearchBar(), // Coloca el SearchBar aquí
 
-                StreamBuilder<List<UserBook>>(
-                  stream: streamUsers(),
-                  builder: (context, snapshot) {
+                StreamBuilder<QuerySnapshot>(
+                  stream: usersStream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No users found');
+                    } else if (!snapshot.hasData) {
+                      return Text('No hay usuarios para mostrar');
                     } else {
                       return Column(
-                        children: snapshot.data!.map((user) {
-                          return _buildTileCard(context, user);
-                        }).toList(),
+                        children: snapshot.data!.docs
+                            .map((DocumentSnapshot document) {
+                              UserBookModel user =
+                                  document.data()! as UserBookModel;
+                              return _buildTileCard(context, user);
+                            })
+                            .toList()
+                            .cast(),
                       );
                     }
                   },
@@ -120,14 +124,14 @@ class ViewUsersPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTileCard(BuildContext context, UserBook user) {
+  Widget _buildTileCard(BuildContext context, UserBookModel user) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ExpansionTileCard(
         baseColor: backgroundColorOptions,
         expandedColor: backgroundColorOptions,
-        title: Text(user.name + ' ' + user.lastName),
-        subtitle: Text(user.dni),
+        title: Text(user.name! + ' ' + user.lastName!),
+        subtitle: Text(user.dni!),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
@@ -151,7 +155,7 @@ class ViewUsersPage extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed(
                     context,
                     ViewUserDetailPage.routeName,
-                    arguments: ViewUserDetailPageArguments(user.dni),
+                    arguments: ViewUserDetailPageArguments(user.dni!),
                   ),
                 ),
               ),

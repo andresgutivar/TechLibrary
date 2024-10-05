@@ -1,4 +1,4 @@
-import 'package:biblioteca/models/user_book.dart';
+import 'package:biblioteca/models/user_book_model.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +15,14 @@ class ViewUserDetailPage extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments
         as ViewUserDetailPageArguments;
 
-    Stream<UserBook?> streamUsers() {
-      return FirebaseFirestore.instance
-          .collection('usersBook')
-          .doc(args.dni)
-          .snapshots()
-          .map((snapshot) {
-        final data = snapshot.data();
-        if (data != null) {
-          return UserBook.fromMap(data);
-        }
-        return null;
-      });
-    }
+    final Stream<DocumentSnapshot> userStream = FirebaseFirestore.instance
+        .collection('usersBook')
+        .withConverter(
+          fromFirestore: UserBookModel.fromFirestore,
+          toFirestore: (UserBookModel user, options) => user.toFirestore(),
+        )
+        .doc(args.dni)
+        .snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -42,22 +37,25 @@ class ViewUserDetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                StreamBuilder<UserBook?>(
-                  stream: streamUsers(),
-                  builder: (context, snapshot) {
+                StreamBuilder<DocumentSnapshot>(
+                  stream: userStream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (!snapshot.hasData) {
-                      return Text('No users found');
+                      return Text('No hay datos de usuario para mostrar');
                     } else {
+                      UserBookModel user =
+                          snapshot.data!.data() as UserBookModel;
+
                       return Column(children: [
-                        _sizedBoxUserData('Nombre: ' + snapshot.data!.name),
-                        _sizedBoxUserData(
-                            'Apellido: ' + snapshot.data!.lastName),
-                        _sizedBoxUserData('DNI: ' + snapshot.data!.dni),
-                        _sizedBoxUserData('Teléfono: ' + snapshot.data!.phone)
+                        _sizedBoxUserData('Nombre: ' + user.name!),
+                        _sizedBoxUserData('Apellido: ' + user.lastName!),
+                        _sizedBoxUserData('DNI: ' + user.dni!),
+                        _sizedBoxUserData('Teléfono: ' + user.phone!)
                       ]);
                     }
                   },

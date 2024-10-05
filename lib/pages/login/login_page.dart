@@ -23,8 +23,7 @@ class LoginPage extends StatelessWidget {
 
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
 
-    void _login() {
-      print("llega");
+    void login() {
       if (_formKey.currentState!.validate()) {
         authService.signInWithEmailAndPassword(
             context, _emailController.text, _passwordController.text);
@@ -126,7 +125,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: () => _login(),
+                    onPressed: () => login(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           const Color(0xFF8FFF7C), // Color de fondo 8FFF7C

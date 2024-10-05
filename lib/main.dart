@@ -1,3 +1,4 @@
+import 'package:biblioteca/models/user_model.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:biblioteca/pages/view_users/view_users_page.dart';
 import 'package:biblioteca/services/authentication.dart';
@@ -5,10 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import "pages/login/loginPage.dart";
+import "pages/login/login_page.dart";
 import 'pages/home/homePage.dart';
-import 'pages/login/recoverAccountPage.dart';
-import 'pages/login/signUpPage.dart';
+import 'pages/login/recover_account_page.dart';
+import 'pages/login/sign_up_page.dart';
 import 'pages/home/registerbookPage.dart';
 import 'pages/home/registerUserPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,19 +43,22 @@ class MyApp extends StatelessWidget {
       await FirebaseAuth.instance.signOut();
     }
 
-    void saveUserInfo(String uid, String email, String name, String lastName,
-        String dni, String phone) async {
-      final data = {
-        'uid': uid,
-        'email': email,
-        'name': name,
-        'lastName': lastName,
-        'dni': dni,
-        'phone': phone,
-      };
-      db.collection("users").add(data).then((documentSnapshot) {
+    //void saveUserInfo(String uid, String email, String name, String lastName, String dni, String phone) async {
+    void saveUserInfo(UserModel user) async {
+      db
+          .collection("users")
+          .withConverter(
+            fromFirestore: UserModel.fromFirestore,
+            toFirestore: (UserModel user, options) => user.toFirestore(),
+          )
+          .doc(user.dni)
+          .set(user)
+          .then((documentSnapshot) {
         signOut();
       });
+      // db.collection("users").add(data).then((documentSnapshot) {
+      //   signOut();
+      // });
     }
 
     return MaterialApp(
@@ -74,13 +78,15 @@ class MyApp extends StatelessWidget {
                 return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {
-                  String uid = snapshot.data!.uid;
-                  String email = prefs.getString('email')!;
-                  String name = prefs.getString('name')!;
-                  String lastName = prefs.getString('lastName')!;
-                  String dni = prefs.getString('dni')!;
-                  String phone = prefs.getString('phone')!;
-                  saveUserInfo(uid, email, name, lastName, dni, phone);
+                  UserModel user = UserModel(
+                      uid: snapshot.data!.uid,
+                      dni: prefs.getString('dni'),
+                      email: prefs.getString('email'),
+                      name: prefs.getString('name'),
+                      lastName: prefs.getString('lastName'),
+                      phone: prefs.getString('phone'));
+
+                  saveUserInfo(user);
                 });
                 return LoginPage();
               }
@@ -145,8 +151,8 @@ class MyApp extends StatelessWidget {
         '/signUp': (context) => SingUpPage(),
         '/registerBook': (context) => RegisterbookPage(),
         '/registerUser': (context) => RegisterUserPage(),
-        ViewUsersPage.routeName: (context) => const ViewUsersPage(),
-        ViewUserDetailPage.routeName: (context) => const ViewUserDetailPage(),
+        ViewUsersPage.routeName: (context) => ViewUsersPage(),
+        ViewUserDetailPage.routeName: (context) => ViewUserDetailPage(),
         //'/informationBook': (context) => BookInformationPage(),
         //'/editBook': (context) => EditBookPage(),
       },
