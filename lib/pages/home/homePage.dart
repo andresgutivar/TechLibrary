@@ -111,6 +111,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildExpansionTileCard(
       BuildContext context, Map<String, dynamic> book) {
+    //print(book["pagination"].runtimeType);
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ExpansionTileCard(

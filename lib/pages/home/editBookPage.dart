@@ -84,7 +84,7 @@ class EditBookPage extends StatelessWidget {
     _isbnCode.text = book["isbn"] ?? '';
     _location.text = book["location"] ?? '';
     _notes.text = book["notes"] ?? '';
-    _pagination.text = book["pagination"] ?? '';
+    _pagination.text = book["pagination"].toString();
     _primaryDescriptor.text = book["primaryDescriptor"] ?? '';
     _secondaryDescriptor.text = book["secondaryDescriptor"] ?? '';
     _yearEdition.text = book["yearEdition"] ?? '';
