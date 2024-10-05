@@ -1,4 +1,5 @@
 import 'package:biblioteca/models/user_book_model.dart';
+import 'package:biblioteca/pages/home/bookInformationPage.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +53,25 @@ class ViewUserDetailPage extends StatelessWidget {
                           snapshot.data!.data() as UserBookModel;
 
                       return Column(children: [
-                        _sizedBoxUserData('Nombre: ' + user.name!),
-                        _sizedBoxUserData('Apellido: ' + user.lastName!),
-                        _sizedBoxUserData('DNI: ' + user.dni!),
-                        _sizedBoxUserData('Teléfono: ' + user.phone!)
+                        MyText(
+                            text: 'Nombre',
+                            value: user.name!,
+                            customColor: customColor),
+                        SizedBox(height: 16),
+                        MyText(
+                            text: 'Apellido',
+                            value: user.lastName!,
+                            customColor: customColor),
+                        SizedBox(height: 16),
+                        MyText(
+                            text: 'DNI',
+                            value: user.dni!,
+                            customColor: customColor),
+                        SizedBox(height: 16),
+                        MyText(
+                            text: 'Teléfono',
+                            value: user.phone!,
+                            customColor: customColor),
                       ]);
                     }
                   },

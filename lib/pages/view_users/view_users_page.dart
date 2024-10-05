@@ -1,4 +1,6 @@
 import 'package:biblioteca/models/user_book_model.dart';
+import 'package:biblioteca/pages/edit_users/edit_user_page.dart';
+import 'package:biblioteca/pages/edit_users/edit_user_page_arguments.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,6 +65,7 @@ class ViewUsersPage extends StatelessWidget {
                     }
                   },
                 ),
+                SizedBox(height: 16),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
@@ -142,6 +145,23 @@ class ViewUsersPage extends StatelessWidget {
             spacing: 60.0,
             overflowAlignment: OverflowBarAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Editar usuario'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    EditUserPage.routeName,
+                    arguments: EditUserPageArguments(user.dni!),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: ElevatedButton.icon(

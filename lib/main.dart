@@ -1,4 +1,5 @@
 import 'package:biblioteca/models/user_model.dart';
+import 'package:biblioteca/pages/edit_users/edit_user_page.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:biblioteca/pages/view_users/view_users_page.dart';
 import 'package:biblioteca/services/authentication.dart';
@@ -153,6 +154,7 @@ class MyApp extends StatelessWidget {
         '/registerUser': (context) => RegisterUserPage(),
         ViewUsersPage.routeName: (context) => ViewUsersPage(),
         ViewUserDetailPage.routeName: (context) => ViewUserDetailPage(),
+        EditUserPage.routeName: (context) => EditUserPage(),
         //'/informationBook': (context) => BookInformationPage(),
         //'/editBook': (context) => EditBookPage(),
       },
