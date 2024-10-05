@@ -1,3 +1,4 @@
+import 'package:biblioteca/models/user_book.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,19 +12,19 @@ class ViewUsersPage extends StatelessWidget {
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color(0xfff8FFF7C);
 
-  Stream<List<Map<String, dynamic>>> streamUsers() {
-    return FirebaseFirestore.instance
-        .collection('usersBook')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    Stream<List<UserBook>> streamUsers() {
+      return FirebaseFirestore.instance
+          .collection('usersBook')
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs
+            .map((doc) => UserBook.fromMap(doc.data()))
+            .toList();
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuarios registrados'),
@@ -40,7 +41,7 @@ class ViewUsersPage extends StatelessWidget {
                 SizedBox(height: 16),
                 _buildSearchBar(), // Coloca el SearchBar aquí
 
-                StreamBuilder<List<Map<String, dynamic>>>(
+                StreamBuilder<List<UserBook>>(
                   stream: streamUsers(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -119,14 +120,14 @@ class ViewUsersPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTileCard(BuildContext context, Map<String, dynamic> user) {
+  Widget _buildTileCard(BuildContext context, UserBook user) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ExpansionTileCard(
         baseColor: backgroundColorOptions,
         expandedColor: backgroundColorOptions,
-        title: Text(user['name'] + ' ' + user['lastName']),
-        subtitle: Text(user['dni']),
+        title: Text(user.name + ' ' + user.lastName),
+        subtitle: Text(user.dni),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
@@ -150,7 +151,7 @@ class ViewUsersPage extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed(
                     context,
                     ViewUserDetailPage.routeName,
-                    arguments: ViewUserDetailPageArguments(user['dni']),
+                    arguments: ViewUserDetailPageArguments(user.dni),
                   ),
                 ),
               ),

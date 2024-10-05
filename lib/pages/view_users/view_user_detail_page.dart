@@ -1,3 +1,4 @@
+import 'package:biblioteca/models/user_book.dart';
 import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,18 @@ class ViewUserDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as ViewUserDetailPageArguments;
-    Stream<Map<String, dynamic>?> streamUsers() {
+
+    Stream<UserBook?> streamUsers() {
       return FirebaseFirestore.instance
           .collection('usersBook')
           .doc(args.dni)
           .snapshots()
           .map((snapshot) {
-        return snapshot.data();
+        final data = snapshot.data();
+        if (data != null) {
+          return UserBook.fromMap(data);
+        }
+        return null;
       });
     }
 
@@ -36,23 +42,22 @@ class ViewUserDetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                StreamBuilder<Map<String, dynamic>?>(
+                StreamBuilder<UserBook?>(
                   stream: streamUsers(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    } else if (!snapshot.hasData) {
                       return Text('No users found');
                     } else {
                       return Column(children: [
-                        _sizedBoxUserData('Nombre: ' + snapshot.data!['name']),
+                        _sizedBoxUserData('Nombre: ' + snapshot.data!.name),
                         _sizedBoxUserData(
-                            'Apellido: ' + snapshot.data!['lastName']),
-                        _sizedBoxUserData('DNI: ' + snapshot.data!['dni']),
-                        _sizedBoxUserData(
-                            'Teléfono: ' + snapshot.data!['phone'])
+                            'Apellido: ' + snapshot.data!.lastName),
+                        _sizedBoxUserData('DNI: ' + snapshot.data!.dni),
+                        _sizedBoxUserData('Teléfono: ' + snapshot.data!.phone)
                       ]);
                     }
                   },
