@@ -17,7 +17,7 @@ class ViewUserDetailPage extends StatelessWidget {
         as ViewUserDetailPageArguments;
 
     final Stream<DocumentSnapshot> userStream = FirebaseFirestore.instance
-        .collection('usersBook')
+        .collection(UserBookModel.tableName)
         .withConverter(
           fromFirestore: UserBookModel.fromFirestore,
           toFirestore: (UserBookModel user, options) => user.toFirestore(),

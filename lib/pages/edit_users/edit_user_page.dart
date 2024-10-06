@@ -24,7 +24,7 @@ class EditUserPage extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as EditUserPageArguments;
 
     FirebaseFirestore.instance
-        .collection('usersBook')
+        .collection(UserBookModel.tableName)
         .doc(args.dni)
         .withConverter(
           fromFirestore: UserBookModel.fromFirestore,
@@ -50,7 +50,7 @@ class EditUserPage extends StatelessWidget {
       );
 
       FirebaseFirestore.instance
-          .collection('usersBook')
+          .collection(UserBookModel.tableName)
           .doc(args.dni)
           .withConverter(
             fromFirestore: UserBookModel.fromFirestore,

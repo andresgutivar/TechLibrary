@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserBookModel {
+  static const String tableName = "usersBook";
+
   final String? name;
   final String? lastName;
   final String? dni;

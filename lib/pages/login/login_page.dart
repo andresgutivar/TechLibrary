@@ -1,5 +1,4 @@
 import 'package:biblioteca/services/authentication.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart'; //para verificar cuando se da click al texto de "recuperala"
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
-  final db = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
 
   LoginPage({super.key});

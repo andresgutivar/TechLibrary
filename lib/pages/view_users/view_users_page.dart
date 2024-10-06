@@ -18,7 +18,7 @@ class ViewUsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance
-        .collection('usersBook')
+        .collection(UserBookModel.tableName)
         .withConverter(
           fromFirestore: UserBookModel.fromFirestore,
           toFirestore: (UserBookModel user, options) => user.toFirestore(),

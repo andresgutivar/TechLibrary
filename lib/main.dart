@@ -29,14 +29,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final db = FirebaseFirestore.instance;
   final AuthenticationService authService = AuthenticationService();
 
   MyApp({super.key});
 
   // Stream that listens to authentication state changes
-  Stream<User?> get authStateChanges => auth.authStateChanges();
+  Stream<User?> get authStateChanges =>
+      FirebaseAuth.instance.authStateChanges();
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +43,9 @@ class MyApp extends StatelessWidget {
       await FirebaseAuth.instance.signOut();
     }
 
-    //void saveUserInfo(String uid, String email, String name, String lastName, String dni, String phone) async {
     void saveUserInfo(UserModel user) async {
-      db
-          .collection("users")
+      FirebaseFirestore.instance
+          .collection(UserModel.tableName)
           .withConverter(
             fromFirestore: UserModel.fromFirestore,
             toFirestore: (UserModel user, options) => user.toFirestore(),
@@ -57,9 +55,6 @@ class MyApp extends StatelessWidget {
           .then((documentSnapshot) {
         signOut();
       });
-      // db.collection("users").add(data).then((documentSnapshot) {
-      //   signOut();
-      // });
     }
 
     return MaterialApp(
