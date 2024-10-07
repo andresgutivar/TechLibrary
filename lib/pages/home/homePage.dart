@@ -1,3 +1,4 @@
+import 'package:biblioteca/pages/new_users/new_user_type_selection_page.dart';
 import 'package:biblioteca/pages/view_users/view_users_page.dart';
 import 'package:biblioteca/services/authentication.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
@@ -282,7 +283,8 @@ class myAppBarWidget extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/registerUser');
+                          Navigator.pushNamed(
+                              context, NewUserTypeSelectionPage.routeName);
                         },
                         child: const Text('Agregar usuario'),
                       ),

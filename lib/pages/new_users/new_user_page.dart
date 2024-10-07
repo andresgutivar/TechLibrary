@@ -1,11 +1,11 @@
 import 'package:biblioteca/models/user_book_model.dart';
-import 'package:biblioteca/pages/edit_users/edit_user_page_arguments.dart';
+import 'package:biblioteca/pages/new_users/new_user_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EditUserPage extends StatelessWidget {
-  static const routeName = '/editUser';
+class NewUserPage extends StatelessWidget {
+  static const routeName = '/newUser';
 
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color.fromRGBO(143, 255, 124, 1);
@@ -16,30 +16,12 @@ class EditUserPage extends StatelessWidget {
   final TextEditingController _dni = TextEditingController();
   final TextEditingController _phone = TextEditingController();
 
-  EditUserPage({super.key});
+  NewUserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as EditUserPageArguments;
-
-    FirebaseFirestore.instance
-        .collection(UserBookModel.tableName)
-        .doc(args.dni)
-        .withConverter(
-          fromFirestore: UserBookModel.fromFirestore,
-          toFirestore: (UserBookModel user, options) => user.toFirestore(),
-        )
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        UserBookModel user = documentSnapshot.data()! as UserBookModel;
-        _name.text = user.name!;
-        _lastName.text = user.lastName!;
-        _dni.text = user.dni!;
-        _phone.text = user.phone!;
-      }
-    });
+        ModalRoute.of(context)!.settings.arguments as NewUserPageArguments;
 
     void saveUser() {
       UserBookModel user = UserBookModel(
@@ -51,7 +33,7 @@ class EditUserPage extends StatelessWidget {
 
       FirebaseFirestore.instance
           .collection(UserBookModel.tableName)
-          .doc(args.dni)
+          .doc(_dni.text)
           .withConverter(
             fromFirestore: UserBookModel.fromFirestore,
             toFirestore: (UserBookModel user, options) => user.toFirestore(),
@@ -74,7 +56,7 @@ class EditUserPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar usuario'),
+        title: const Text('Nuevo usuario'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
