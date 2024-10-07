@@ -1,11 +1,17 @@
 import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
 
-class RecoverAccountPage extends StatelessWidget {
+class RecoverAccountPage extends StatefulWidget {
+  const RecoverAccountPage({super.key});
+
+  @override
+  State<RecoverAccountPage> createState() => _RecoverAccountPageState();
+}
+
+class _RecoverAccountPageState extends State<RecoverAccountPage> {
   final TextEditingController _emailController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
-  final _formKey = GlobalKey<FormState>();
-  RecoverAccountPage({super.key});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,5 +111,12 @@ class RecoverAccountPage extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       authService.requestRecovery(context, _emailController.text);
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+
+    super.dispose();
   }
 }

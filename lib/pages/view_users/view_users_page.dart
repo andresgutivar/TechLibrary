@@ -1,27 +1,30 @@
-import 'package:biblioteca/models/user.dart';
-import 'package:biblioteca/pages/home/view_user_detail.dart';
+import 'package:biblioteca/models/user_book_model.dart';
+import 'package:biblioteca/pages/edit_users/edit_user_page.dart';
+import 'package:biblioteca/pages/edit_users/edit_user_page_arguments.dart';
+import 'package:biblioteca/pages/view_users/view_user_detail_page_arguments.dart';
+import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 
-class ViewUsers extends StatelessWidget {
-  const ViewUsers({super.key});
-  static const Color customColor = Color.fromARGB(210, 81, 232, 55);
-  static const Color backgroundColorOptions = Color(0xfff8FFF7C);
+class ViewUsersPage extends StatelessWidget {
+  static const routeName = '/viewUsers';
 
-  Stream<List<Map<String, dynamic>>> streamUsers() {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-    });
-  }
+  static const Color customColor = Color.fromARGB(210, 81, 232, 55);
+  static const Color backgroundColorOptions = Color.fromRGBO(143, 255, 124, 1);
+
+  const ViewUsersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance
+        .collection(UserBookModel.tableName)
+        .withConverter(
+          fromFirestore: UserBookModel.fromFirestore,
+          toFirestore: (UserBookModel user, options) => user.toFirestore(),
+        )
+        .snapshots();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuarios registrados'),
@@ -38,24 +41,31 @@ class ViewUsers extends StatelessWidget {
                 SizedBox(height: 16),
                 _buildSearchBar(), // Coloca el SearchBar aquí
 
-                StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: streamUsers(),
-                  builder: (context, snapshot) {
+                StreamBuilder<QuerySnapshot>(
+                  stream: usersStream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No users found');
+                    } else if (!snapshot.hasData) {
+                      return Text('No hay usuarios para mostrar');
                     } else {
                       return Column(
-                        children: snapshot.data!.map((user) {
-                          return _buildTileCard(context, user);
-                        }).toList(),
+                        children: snapshot.data!.docs
+                            .map((DocumentSnapshot document) {
+                              UserBookModel user =
+                                  document.data()! as UserBookModel;
+                              return _buildTileCard(context, user);
+                            })
+                            .toList()
+                            .cast(),
                       );
                     }
                   },
                 ),
+                SizedBox(height: 16),
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
@@ -117,14 +127,14 @@ class ViewUsers extends StatelessWidget {
     );
   }
 
-  Widget _buildTileCard(BuildContext context, Map<String, dynamic> user) {
+  Widget _buildTileCard(BuildContext context, UserBookModel user) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ExpansionTileCard(
         baseColor: backgroundColorOptions,
         expandedColor: backgroundColorOptions,
-        title: Text(user['name'] + ' ' + user['lastName']),
-        subtitle: Text(user['dni']),
+        title: Text(user.name! + ' ' + user.lastName!),
+        subtitle: Text(user.dni!),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
@@ -138,23 +148,36 @@ class ViewUsers extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: ElevatedButton.icon(
-                    icon: const Icon(Icons.info),
-                    label: const Text('Más información'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: customColor,
-                      foregroundColor: Colors.black,
-                      elevation: 3,
-                    ),
-                    onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewUserDetail(),
-                            settings: RouteSettings(
-                              arguments:
-                                  user, // Pass the User object as an argument
-                            ),
-                          ),
-                        )),
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Editar usuario'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    EditUserPage.routeName,
+                    arguments: EditUserPageArguments(user.dni!),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.info),
+                  label: const Text('Más información'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: customColor,
+                    foregroundColor: Colors.black,
+                    elevation: 3,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    ViewUserDetailPage.routeName,
+                    arguments: ViewUserDetailPageArguments(user.dni!),
+                  ),
+                ),
               ),
             ],
           ),
