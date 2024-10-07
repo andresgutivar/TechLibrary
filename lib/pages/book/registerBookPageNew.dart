@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Para restringir entrada numérica
+import 'package:biblioteca/models/book_model.dart';
 
-class RegisterbookPage extends StatelessWidget {
-  RegisterbookPage({super.key});
+class RegisterBookPageNew extends StatefulWidget {
+  const RegisterBookPageNew({super.key});
+  static const Color customColor = Color.fromARGB(210, 81, 232, 55);
+  @override
+  State<RegisterBookPageNew> createState() => RegisterBookPageNewState();
+}
 
-  // Controladores de texto
+class RegisterBookPageNewState extends State<RegisterBookPageNew> {
   final TextEditingController _tittle = TextEditingController();
   final TextEditingController _editorial = TextEditingController();
   final TextEditingController _author = TextEditingController();
@@ -18,50 +23,68 @@ class RegisterbookPage extends StatelessWidget {
   final TextEditingController _edition = TextEditingController();
   final TextEditingController _yearEdition = TextEditingController();
   final TextEditingController _notes = TextEditingController();
-  //final TextEditingController _status = TextEditingController(text: "disponible"); //este dato de debe guardar como "disponible autonamitacamente"
-
-  void _registerBook(BuildContext context) {
-    if (_tittle.text.isEmpty ||
-        _editorial.text.isEmpty ||
-        _author.text.isEmpty ||
-        _location.text.isEmpty ||
-        _entryDate.text.isEmpty ||
-        _primaryDescriptor.text.isEmpty ||
-        _numberPages.text.isEmpty ||
-        _isbnCode.text.isEmpty ||
-        _secondaryDescriptor.text.isEmpty ||
-        _editingPlace.text.isEmpty ||
-        _edition.text.isEmpty ||
-        _yearEdition.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, completa todos los campos obligatorios.'),
-        ),
-      );
-      return;
-    }
-    //guardamos los datos en la base de datos
-    Navigator.pushNamed(context, '/home');
-  }
-
-  Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (pickedDate != null) {
-      controller.text =
-          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    const Color customColor = Color.fromARGB(210, 81, 232, 55);
+    void registerBook() {
+      if (_tittle.text.isEmpty ||
+          _editorial.text.isEmpty ||
+          _author.text.isEmpty ||
+          _location.text.isEmpty ||
+          _entryDate.text.isEmpty ||
+          _primaryDescriptor.text.isEmpty ||
+          _numberPages.text.isEmpty ||
+          _isbnCode.text.isEmpty ||
+          _secondaryDescriptor.text.isEmpty ||
+          _editingPlace.text.isEmpty ||
+          _edition.text.isEmpty ||
+          _yearEdition.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, completa todos los campos obligatorios.'),
+          ),
+        );
+        return;
+      } else {
+        BookModel book = BookModel(
+          author: _author.text,
+          editingPlace: _editingPlace.text,
+          edition: _edition.text,
+          editorial: _editorial.text,
+          //entryDate:_entryDate.text.Timestamp.fromDate(currentPhoneDate);,//tengo que cambiar el tipo de dato a datetime
+          //isbn:_isbnCode.text,//cambiar tipo de dato a int
+          location: _location.text,
+          notes: _notes.text,
+          pagination: _numberPages.text,
+          primaryDescriptor: _primaryDescriptor.text,
+          secondaryDescriptor: _secondaryDescriptor.text,
+          title: _tittle.text,
+          yearEdition: _yearEdition.text,
+        );
+
+        FirebaseFirestore.instance
+            .collection(BookModel.tableName)
+            .doc(_isbnCode.text)
+            .withConverter(
+              fromFirestore: BookModel.fromFirestore,
+              toFirestore: (BookModel user, options) => user.toFirestore(),
+            )
+            .set(book)
+            .then((documentSnapshot) {
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
+        }).catchError((err) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Error al guardar los datos del usuario.'),
+              ),
+            );
+          }
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrar Libro'),
@@ -75,56 +98,58 @@ class RegisterbookPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                _buildTextField(
-                    _tittle, 'Titulo', Icons.title_outlined, customColor),
+                _buildTextField(_tittle, 'Titulo', Icons.title_outlined,
+                    RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
-                _buildTextField(
-                    _editorial, 'Editorial', Icons.numbers, customColor),
+                _buildTextField(_editorial, 'Editorial', Icons.numbers,
+                    RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
-                _buildTextField(
-                    _author, 'Autor/Autora', Icons.person, customColor),
+                _buildTextField(_author, 'Autor/Autora', Icons.person,
+                    RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_location, 'Ubicación', Icons.map, customColor),
+                _buildTextField(_location, 'Ubicación', Icons.map,
+                    RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
                   _entryDate,
                   'Fecha de ingreso',
                   Icons.calendar_month,
-                  customColor,
+                  RegisterBookPageNew.customColor,
                   isDateField: true,
                   context: context,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(_primaryDescriptor, 'Descriptor primario',
-                    Icons.star, customColor),
+                    Icons.star, RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(_secondaryDescriptor, 'Descriptor secundario',
-                    Icons.star_half, customColor),
+                    Icons.star_half, RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
                   _numberPages,
                   'Cantidad de páginas',
                   Icons.auto_stories,
-                  customColor,
+                  RegisterBookPageNew.customColor,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
                   _isbnCode,
                   'Código ISBN',
                   Icons.vpn_key,
-                  customColor,
+                  RegisterBookPageNew.customColor,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(_editingPlace, 'Lugar de edición',
-                    Icons.location_on, customColor),
+                    Icons.location_on, RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_edition, 'Edición', Icons.tag, customColor),
+                _buildTextField(_edition, 'Edición', Icons.tag,
+                    RegisterBookPageNew.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
                   _yearEdition,
                   'Año de edición',
                   Icons.event,
-                  customColor,
+                  RegisterBookPageNew.customColor,
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -138,14 +163,15 @@ class RegisterbookPage extends StatelessWidget {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
-                          color: customColor,
+                          color: RegisterBookPageNew.customColor,
                           width: 2,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: customColor.withOpacity(0.5),
+                          color:
+                              RegisterBookPageNew.customColor.withOpacity(0.5),
                           width: 2,
                         ),
                       ),
@@ -156,7 +182,7 @@ class RegisterbookPage extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: () => _registerBook(context),
+                    onPressed: () => registerBook,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8FFF7C),
                       foregroundColor: Colors.black,
@@ -214,5 +240,20 @@ class RegisterbookPage extends StatelessWidget {
             : null,
       ),
     );
+  }
+}
+
+Future<void> _selectDate(
+    BuildContext context, TextEditingController controller) async {
+  final DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2101),
+  );
+
+  if (pickedDate != null) {
+    controller.text =
+        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
   }
 }

@@ -13,12 +13,12 @@ import "pages/login/login_page.dart";
 import 'pages/home/homePage.dart';
 import 'pages/login/recover_account_page.dart';
 import 'pages/login/sign_up_page.dart';
-import 'pages/home/registerbookPage.dart';
+import 'pages/book/registerBookPageNew.dart';
 import 'pages/home/registerUserPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:biblioteca/pages/home/bookInformationPage.dart';
-import 'package:biblioteca/pages/home/editBookPage.dart';
+import 'package:biblioteca/pages/book/bookInformationPage.dart';
+import 'package:biblioteca/pages/book/editBookPage.dart';
 import 'package:biblioteca/pages/home/registerLoanPage.dart';
 import 'package:biblioteca/pages/home/infoLoanPage.dart';
 
@@ -153,8 +153,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/recoverAccount': (context) => RecoverAccountPage(),
         '/signUp': (context) => SingUpPage(),
-        '/registerBook': (context) => RegisterbookPage(),
-        '/registerUser': (context) => RegisterUserPage(),
+        '/registerBook': (context) => RegisterBookPageNew(),
+
+        // '/registerUser': (context) => RegisterUserPage(),
         ViewUsersPage.routeName: (context) => ViewUsersPage(),
         ViewUserDetailPage.routeName: (context) => ViewUserDetailPage(),
         EditUserPage.routeName: (context) => EditUserPage(),

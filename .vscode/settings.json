@@ -1,3 +1,4 @@
 {
-  "cmake.sourceDirectory": "C:/Users/andres/Desktop/Cosas diversas/DVteam/Biblioteca/biblioteca/windows"
+  "cmake.sourceDirectory": "C:/Users/andres/Desktop/Cosas diversas/DVteam/Biblioteca/biblioteca/windows",
+  "cmake.ignoreCMakeListsMissing": true
 }
