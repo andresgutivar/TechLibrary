@@ -85,6 +85,12 @@ class MyApp extends StatelessWidget {
                       phone: prefs.getString('phone'));
 
                   saveUserInfo(user);
+
+                  prefs.remove('dni');
+                  prefs.remove('email');
+                  prefs.remove('name');
+                  prefs.remove('lastName');
+                  prefs.remove('phone');
                 });
                 return LoginPage();
               }
