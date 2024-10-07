@@ -2,7 +2,14 @@ import 'package:biblioteca/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SingUpPage extends StatelessWidget {
+class SingUpPage extends StatefulWidget {
+  const SingUpPage({super.key});
+
+  @override
+  State<SingUpPage> createState() => _SingUpPageState();
+}
+
+class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -10,9 +17,8 @@ class SingUpPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
-  final _formKey = GlobalKey<FormState>();
 
-  SingUpPage({super.key});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -309,5 +315,17 @@ class SingUpPage extends StatelessWidget {
       authService.signUp(
           context, _emailController.text, _passwordController.text);
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _lastNameController.dispose();
+    _dniController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
+
+    super.dispose();
   }
 }

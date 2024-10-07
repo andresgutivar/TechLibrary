@@ -84,22 +84,4 @@ class ViewUserDetailPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _sizedBoxUserData(text) {
-    return SizedBox(
-      width: 300,
-      child: Container(
-        decoration: BoxDecoration(
-          color: customColor, // Green background
-          borderRadius: BorderRadius.circular(20), // Rounded borders
-        ),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(text),
-          ),
-        ),
-      ),
-    );
-  }
 }

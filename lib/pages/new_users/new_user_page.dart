@@ -4,19 +4,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class NewUserPage extends StatelessWidget {
+class NewUserPage extends StatefulWidget {
   static const routeName = '/newUser';
 
   static const Color customColor = Color.fromARGB(210, 81, 232, 55);
   static const Color backgroundColorOptions = Color.fromRGBO(143, 255, 124, 1);
 
+  const NewUserPage({super.key});
+
+  @override
+  State<NewUserPage> createState() => _NewUserPageState();
+}
+
+class _NewUserPageState extends State<NewUserPage> {
   // Controladores de texto
   final TextEditingController _name = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _dni = TextEditingController();
   final TextEditingController _phone = TextEditingController();
-
-  NewUserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +72,17 @@ class NewUserPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                _buildTextField(
-                    _name, 'Nombre', Icons.title_outlined, customColor),
+                _buildTextField(_name, 'Nombre', Icons.title_outlined,
+                    NewUserPage.customColor),
+                const SizedBox(height: 16),
+                _buildTextField(_lastName, 'Apellido', Icons.title_outlined,
+                    NewUserPage.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _lastName, 'Apellido', Icons.title_outlined, customColor),
+                    _dni, 'DNI', Icons.credit_card, NewUserPage.customColor),
                 const SizedBox(height: 16),
-                _buildTextField(_dni, 'DNI', Icons.credit_card, customColor),
-                const SizedBox(height: 16),
-                _buildTextField(_phone, 'Teléfono', Icons.phone, customColor),
+                _buildTextField(
+                    _phone, 'Teléfono', Icons.phone, NewUserPage.customColor),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: 300,
@@ -138,5 +145,15 @@ class NewUserPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _lastName.dispose();
+    _dni.dispose();
+    _phone.dispose();
+
+    super.dispose();
   }
 }

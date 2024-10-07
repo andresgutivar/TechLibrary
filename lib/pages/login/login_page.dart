@@ -3,13 +3,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart'; //para verificar cuando se da click al texto de "recuperala"
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthenticationService authService = AuthenticationService();
-  final _formKey = GlobalKey<FormState>();
 
-  LoginPage({super.key});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -198,5 +204,13 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+
+    super.dispose();
   }
 }
