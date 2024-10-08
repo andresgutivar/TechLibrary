@@ -23,9 +23,11 @@ class RegisterBookPageNewState extends State<RegisterBookPageNew> {
   final TextEditingController _edition = TextEditingController();
   final TextEditingController _yearEdition = TextEditingController();
   final TextEditingController _notes = TextEditingController();
+  late DateTime finalEntryDate;
   @override
   Widget build(BuildContext context) {
     void registerBook() {
+      //print("entraste");
       if (_tittle.text.isEmpty ||
           _editorial.text.isEmpty ||
           _author.text.isEmpty ||
@@ -50,8 +52,9 @@ class RegisterBookPageNewState extends State<RegisterBookPageNew> {
           editingPlace: _editingPlace.text,
           edition: _edition.text,
           editorial: _editorial.text,
-          //entryDate:_entryDate.text.Timestamp.fromDate(currentPhoneDate);,//tengo que cambiar el tipo de dato a datetime
-          //isbn:_isbnCode.text,//cambiar tipo de dato a int
+          entryDate: Timestamp.fromDate(
+              finalEntryDate), //tengo que cambiar el tipo de dato a datetime
+          isbn: _isbnCode.text,
           location: _location.text,
           notes: _notes.text,
           pagination: _numberPages.text,
@@ -74,6 +77,7 @@ class RegisterBookPageNewState extends State<RegisterBookPageNew> {
             Navigator.of(context).pop();
           }
         }).catchError((err) {
+          print(err);
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -182,7 +186,7 @@ class RegisterBookPageNewState extends State<RegisterBookPageNew> {
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: () => registerBook,
+                    onPressed: () => registerBook(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8FFF7C),
                       foregroundColor: Colors.black,
@@ -241,19 +245,22 @@ class RegisterBookPageNewState extends State<RegisterBookPageNew> {
       ),
     );
   }
-}
 
-Future<void> _selectDate(
-    BuildContext context, TextEditingController controller) async {
-  final DateTime? pickedDate = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2101),
-  );
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
 
-  if (pickedDate != null) {
-    controller.text =
-        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    if (pickedDate != null) {
+      print(pickedDate);
+      finalEntryDate = pickedDate;
+      print(finalEntryDate);
+      controller.text =
+          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+    }
   }
 }

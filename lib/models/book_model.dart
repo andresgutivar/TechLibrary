@@ -8,8 +8,8 @@ class BookModel {
   final String? edition;
   final String? editorial;
   final Timestamp? entryDate;
-  final int? isbn;
-  final int? lenderId;
+  final String? isbn;
+  final String? lenderId;
   final String? location;
   final String? notes;
   final String? pagination;
@@ -72,16 +72,16 @@ class BookModel {
       if (editorial != null) "editorial": editorial,
       if (entryDate != null) "entryDate": entryDate,
       if (isbn != null) "isbn": isbn,
-      if (lenderId != null) "lenderId": lenderId,
+      if (lenderId != null) "lenderId": lenderId else "lenderId": "",
       if (location != null) "location": location,
       if (notes != null) "notes": notes,
       if (pagination != null) "pagination": pagination,
       if (primaryDescriptor != null) "primaryDescriptor": primaryDescriptor,
       if (secondaryDescriptor != null)
         "secondaryDescriptor": secondaryDescriptor,
-      if (status != null) "status": status,
+      if (status != null) "status": status else "status": "disponible",
       if (title != null) "title": title,
-      if (userId != null) "userId": userId,
+      if (userId != null) "userId": userId else "userId": "",
       if (yearEdition != null) "yearEdition": yearEdition,
     };
   }
