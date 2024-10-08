@@ -4,7 +4,7 @@ import 'package:biblioteca/services/authentication.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import './editBookPage.dart';
+import '../book/editBookPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
