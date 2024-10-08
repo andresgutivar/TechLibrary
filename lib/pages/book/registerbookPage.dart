@@ -67,23 +67,40 @@ class RegisterBookPageState extends State<RegisterBookPage> {
         FirebaseFirestore.instance
             .collection(BookModel.tableName)
             .doc(_isbnCode.text)
-            .withConverter(
-              fromFirestore: BookModel.fromFirestore,
-              toFirestore: (BookModel user, options) => user.toFirestore(),
-            )
-            .set(book)
+            .get()
             .then((documentSnapshot) {
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-        }).catchError((err) {
-          print(err);
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Error al guardar los datos del usuario.'),
-              ),
-            );
+          if (documentSnapshot.exists) {
+            // Si el documento ya existe, mostramos un mensaje de error.
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Ya existe un libro con este ISBN.'),
+                ),
+              );
+            }
+          } else {
+            FirebaseFirestore.instance
+                .collection(BookModel.tableName)
+                .doc(_isbnCode.text)
+                .withConverter(
+                  fromFirestore: BookModel.fromFirestore,
+                  toFirestore: (BookModel user, options) => user.toFirestore(),
+                )
+                .set(book)
+                .then((documentSnapshot) {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            }).catchError((err) {
+              print(err);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Error al guardar los datos del usuario.'),
+                  ),
+                );
+              }
+            });
           }
         });
       }
