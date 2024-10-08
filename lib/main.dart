@@ -13,7 +13,7 @@ import "pages/login/login_page.dart";
 import 'pages/home/homePage.dart';
 import 'pages/login/recover_account_page.dart';
 import 'pages/login/sign_up_page.dart';
-import 'pages/book/registerBookPageNew.dart';
+import 'pages/book/registerBookPage.dart';
 import 'pages/home/registerUserPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -153,7 +153,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/recoverAccount': (context) => RecoverAccountPage(),
         '/signUp': (context) => SingUpPage(),
-        '/registerBook': (context) => RegisterBookPageNew(),
+        '/registerBook': (context) => RegisterBookPage(),
 
         // '/registerUser': (context) => RegisterUserPage(),
         ViewUsersPage.routeName: (context) => ViewUsersPage(),
