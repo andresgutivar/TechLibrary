@@ -1,10 +1,13 @@
+import 'package:biblioteca/pages/book/edit-book/edit-book-page-arguments.dart';
+import 'package:biblioteca/pages/book/edit-book/editBookPageNew.dart';
+import 'package:biblioteca/pages/user-book/edit_users/edit_user_page.dart';
 import 'package:biblioteca/pages/user-book/new_users/new_user_type_selection_page.dart';
 import 'package:biblioteca/pages/user-book/view_users/view_users_page.dart';
 import 'package:biblioteca/services/authentication.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../book/editBookPage.dart';
+import '../book/edit-book/editBookPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -155,13 +158,11 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.black,
                     elevation: 3,
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/editBookPage',
-                      arguments: book,
-                    );
-                  },
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    EditBookPageNew.routeName,
+                    arguments: EditBookPageArguments(book["isbn"]!),
+                  ),
                 ),
               ),
               Padding(

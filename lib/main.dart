@@ -13,15 +13,16 @@ import "pages/login/login_page.dart";
 import 'pages/home/homePage.dart';
 import 'pages/login/recover_account_page.dart';
 import 'pages/login/sign_up_page.dart';
-import 'pages/book/registerBookPage.dart';
+import 'pages/book/new-book/registerbookPage.dart';
 import 'pages/home/registerUserPage.dart';
-import 'pages/book/editBookPageNew.dart';
+//import 'pages/book/edit-book/editBookPageNew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:biblioteca/pages/book/bookInformationPage.dart';
-import 'package:biblioteca/pages/book/editBookPage.dart';
+import 'package:biblioteca/pages/book/details-book/bookInformationPage.dart';
+import 'package:biblioteca/pages/book/edit-book/editBookPage.dart';
 import 'package:biblioteca/pages/home/registerLoanPage.dart';
 import 'package:biblioteca/pages/home/infoLoanPage.dart';
+import 'pages/book/edit-book/editBookPageNew.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -145,15 +146,6 @@ class MyApp extends StatelessWidget {
             },
           );
         }
-        if (settings.name == '/editBook') {
-          final Map<String, dynamic> book =
-              settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) {
-              return EditBookPageNew(book: book);
-            },
-          );
-        }
 
         //Aquí pueden manejarse otras rutas si es necesario
         return null;
@@ -172,6 +164,7 @@ class MyApp extends StatelessWidget {
         NewUserPage.routeName: (context) => NewUserPage(),
         NewUserTypeSelectionPage.routeName: (context) =>
             NewUserTypeSelectionPage(),
+        EditBookPageNew.routeName: (context) => EditBookPageNew(),
         //'/informationBook': (context) => BookInformationPage(),
         //'/editBook': (context) => EditBookPage(),
       },
