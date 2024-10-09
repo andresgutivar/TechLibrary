@@ -1,9 +1,9 @@
 import 'package:biblioteca/models/user_model.dart';
-import 'package:biblioteca/pages/edit_users/edit_user_page.dart';
-import 'package:biblioteca/pages/new_users/new_user_page.dart';
-import 'package:biblioteca/pages/new_users/new_user_type_selection_page.dart';
-import 'package:biblioteca/pages/view_users/view_user_detail_page.dart';
-import 'package:biblioteca/pages/view_users/view_users_page.dart';
+import 'package:biblioteca/pages/user-book/edit_users/edit_user_page.dart';
+import 'package:biblioteca/pages/user-book/new_users/new_user_page.dart';
+import 'package:biblioteca/pages/user-book/new_users/new_user_type_selection_page.dart';
+import 'package:biblioteca/pages/user-book/view_users/view_user_detail_page.dart';
+import 'package:biblioteca/pages/user-book/view_users/view_users_page.dart';
 import 'package:biblioteca/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'pages/login/recover_account_page.dart';
 import 'pages/login/sign_up_page.dart';
 import 'pages/book/registerBookPage.dart';
 import 'pages/home/registerUserPage.dart';
+import 'pages/book/editBookPageNew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biblioteca/pages/book/bookInformationPage.dart';
@@ -141,6 +142,15 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return InfoLoanPage(book: book);
+            },
+          );
+        }
+        if (settings.name == '/editBook') {
+          final Map<String, dynamic> book =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return EditBookPageNew(book: book);
             },
           );
         }

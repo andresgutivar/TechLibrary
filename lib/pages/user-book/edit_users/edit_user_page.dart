@@ -1,5 +1,5 @@
 import 'package:biblioteca/models/user_book_model.dart';
-import 'package:biblioteca/pages/edit_users/edit_user_page_arguments.dart';
+import 'package:biblioteca/pages/user-book/edit_users/edit_user_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

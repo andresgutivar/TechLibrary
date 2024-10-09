@@ -1,5 +1,5 @@
-import 'package:biblioteca/pages/new_users/new_user_page.dart';
-import 'package:biblioteca/pages/new_users/new_user_page_arguments.dart';
+import 'package:biblioteca/pages/user-book/new_users/new_user_page.dart';
+import 'package:biblioteca/pages/user-book/new_users/new_user_page_arguments.dart';
 import 'package:flutter/material.dart';
 
 class NewUserTypeSelectionPage extends StatelessWidget {
