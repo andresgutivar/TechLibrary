@@ -20,8 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biblioteca/pages/book/details-book/bookInformationPage.dart';
 import 'package:biblioteca/pages/book/edit-book/editBookPage.dart';
-import 'package:biblioteca/pages/home/registerLoanPage.dart';
-import 'package:biblioteca/pages/home/infoLoanPage.dart';
+import 'package:biblioteca/pages/loan/register-loan/registerLoanPage.dart';
+import 'package:biblioteca/pages/loan/view-loan/infoLoanPageNew.dart';
 import 'pages/book/edit-book/editBookPageNew.dart';
 
 void main() async {
@@ -137,15 +137,15 @@ class MyApp extends StatelessWidget {
             },
           );
         }
-        if (settings.name == '/informationLoan') {
-          final Map<String, dynamic> book =
-              settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) {
-              return InfoLoanPage(book: book);
-            },
-          );
-        }
+        // if (settings.name == '/informationLoan') {
+        //   final Map<String, dynamic> book =
+        //       settings.arguments as Map<String, dynamic>;
+        //   return MaterialPageRoute(
+        //     builder: (context) {
+        //       return InfoLoanPage(book: book);
+        //     },
+        //   );
+        // }
 
         //Aquí pueden manejarse otras rutas si es necesario
         return null;
@@ -165,6 +165,7 @@ class MyApp extends StatelessWidget {
         NewUserTypeSelectionPage.routeName: (context) =>
             NewUserTypeSelectionPage(),
         EditBookPageNew.routeName: (context) => EditBookPageNew(),
+        infoLoanPageNew.routeName: (context) => infoLoanPageNew(),
         //'/informationBook': (context) => BookInformationPage(),
         //'/editBook': (context) => EditBookPage(),
       },

@@ -1,5 +1,8 @@
+import 'package:biblioteca/models/book_model.dart';
 import 'package:biblioteca/pages/book/edit-book/edit-book-page-arguments.dart';
 import 'package:biblioteca/pages/book/edit-book/editBookPageNew.dart';
+import 'package:biblioteca/pages/loan/view-loan/infoLoanPageArguments.dart';
+import 'package:biblioteca/pages/loan/view-loan/infoLoanPageNew.dart';
 import 'package:biblioteca/pages/user-book/edit_users/edit_user_page.dart';
 import 'package:biblioteca/pages/user-book/new_users/new_user_type_selection_page.dart';
 import 'package:biblioteca/pages/user-book/view_users/view_users_page.dart';
@@ -37,6 +40,17 @@ class _HomePageState extends State<HomePage> {
     //logica para cerrar sesion
     //Navigator.pushNamed(context, '/login');
     _authService.signOut(context);
+  }
+
+  void deleteBook(book) {
+    FirebaseFirestore.instance
+        .collection(BookModel.tableName)
+        .doc(book)
+        .delete()
+        .then(
+          (doc) => print("Document deleted"),
+          onError: (e) => print("Error updating document $e"),
+        );
   }
 
   @override
@@ -165,26 +179,47 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.delete),
-                  label: const Text('Eliminar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: customColor,
-                    foregroundColor: Colors.black,
-                    elevation: 3,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
+
               // Condicional para mostrar diferentes botones según el estado del libro
-              if (book["status"] == "disponible")
+              if (book["status"] != "disponible")
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.info),
+                    label: const Text('Préstamo'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customColor,
+                      foregroundColor: Colors.black,
+                      elevation: 3,
+                    ),
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      infoLoanPageNew.routeName,
+                      arguments: infoLoanPageArguments(book["isbn"]!),
+                    ),
+                  ),
+                )
+              else ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.delete),
+                    label: const Text('Eliminar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: customColor,
+                      foregroundColor: Colors.black,
+                      elevation: 3,
+                    ),
+                    onPressed: () {
+                      deleteBook(book["isbn"]);
+                    },
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.bookmark),
-                    label: const Text('Préstamo'),
+                    label: const Text("prestamo"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: customColor,
                       foregroundColor: Colors.black,
@@ -195,27 +230,6 @@ class _HomePageState extends State<HomePage> {
                         context,
                         '/registerLoan',
                         arguments: book["isbn"],
-                      );
-                    },
-                  ),
-                )
-              else ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.info),
-                    label: const Text("prestamo"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: customColor,
-                      foregroundColor: Colors.black,
-                      elevation: 3,
-                    ),
-                    onPressed: () {
-                      //marcar libro como disponible
-                      Navigator.pushNamed(
-                        context,
-                        '/informationLoan',
-                        arguments: book,
                       );
                     },
                   ),
