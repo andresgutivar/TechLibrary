@@ -58,7 +58,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
         _notes.text = book.notes!;
       }
     });
-    void updateBook() {
+    Future<void> updateBook() async {
       //print("entraste");
       if (_tittle.text.isEmpty ||
           _editorial.text.isEmpty ||
@@ -95,45 +95,71 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
           yearEdition: _yearEdition.text,
         );
 
-        FirebaseFirestore.instance
+        // FirebaseFirestore.instance
+        //     .collection(BookModel.tableName)
+        //     .doc(_isbnCode.text)
+        //     .withConverter(
+        //       fromFirestore: BookModel.fromFirestore,
+        //       toFirestore: (BookModel auxBook, options) =>
+        //           auxBook.toFirestore(),
+        //     )
+        //     .get()
+        //     .then((DocumentSnapshot documentSnapshot) {
+        final ref = FirebaseFirestore.instance
             .collection(BookModel.tableName)
             .doc(_isbnCode.text)
-            .get()
-            .then((documentSnapshot) {
-          if (documentSnapshot.exists) {
-            BookModel auxBook = documentSnapshot.data()! as BookModel;
-            if (context.mounted && auxBook.isbn != args.isbn) {
+            .withConverter(
+              fromFirestore: BookModel.fromFirestore,
+              toFirestore: (BookModel auxBook, options) =>
+                  auxBook.toFirestore(),
+            );
+        final docSnap = await ref.get();
+        //BookModel auxBook = docSnap.data()!;
+
+        if (docSnap.data() != null && docSnap["isbn"] != args.isbn) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ya existe un libro con este ISBN.'),
+            ),
+          );
+        } else {
+          FirebaseFirestore.instance
+              .collection(BookModel.tableName)
+              .doc(_isbnCode.text)
+              .withConverter(
+                fromFirestore: BookModel.fromFirestore,
+                toFirestore: (BookModel user, options) => user.toFirestore(),
+              )
+              .set(book)
+              .then((documentSnapshot) {
+            /*eliminamos el documento existente con el isbn anterior, ya que lo que sucede es que
+                al darle un nuevo isbn lo detecta como inexistente y lo que hace es crear 
+                uno nuevo duplicando todos los datos*/
+            if (args.isbn != _isbnCode.text) {
+              FirebaseFirestore.instance
+                  .collection(BookModel.tableName)
+                  .doc(args.isbn)
+                  .delete()
+                  .then(
+                    (doc) => print("Document deleted"),
+                    onError: (e) => print("Error updating document $e"),
+                  );
+            }
+
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          }).catchError((err) {
+            print(err);
+            if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Ya existe un libro con este ISBN.'),
+                  content: Text('Error al guardar los datos del usuario.'),
                 ),
               );
             }
-          } else {
-            FirebaseFirestore.instance
-                .collection(BookModel.tableName)
-                .doc(_isbnCode.text)
-                .withConverter(
-                  fromFirestore: BookModel.fromFirestore,
-                  toFirestore: (BookModel user, options) => user.toFirestore(),
-                )
-                .set(book)
-                .then((documentSnapshot) {
-              if (context.mounted) {
-                Navigator.of(context).pop();
-              }
-            }).catchError((err) {
-              print(err);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Error al guardar los datos del usuario.'),
-                  ),
-                );
-              }
-            });
-          }
-        });
+          });
+        }
       }
     }
 
