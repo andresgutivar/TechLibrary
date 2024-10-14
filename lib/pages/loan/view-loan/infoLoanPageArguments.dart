@@ -1,5 +1,6 @@
 class infoLoanPageArguments {
-  final String isbn;
+  final String lenderId;
+  final String userId;
 
-  infoLoanPageArguments(this.isbn);
+  infoLoanPageArguments(this.lenderId, this.userId);
 }

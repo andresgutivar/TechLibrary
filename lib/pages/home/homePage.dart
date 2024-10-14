@@ -195,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => Navigator.pushNamed(
                       context,
                       infoLoanPageNew.routeName,
-                      arguments: infoLoanPageArguments(book["isbn"]!),
+                      arguments: infoLoanPageArguments(
+                          book["lenderId"]!, book["userId"]!),
                     ),
                   ),
                 )
