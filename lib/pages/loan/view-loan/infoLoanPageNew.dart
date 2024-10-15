@@ -44,11 +44,13 @@ class infoLoanPageNew extends StatelessWidget {
                   stream: userStream,
                   builder: (BuildContext context,
                       AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
+                    // if (snapshot.connectionState == ConnectionState.waiting) {
+                    //   return CircularProgressIndicator();
+                    // }
+                    if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData) {
+                    } else if (!snapshot.hasData &&
+                        snapshot.connectionState != ConnectionState.waiting) {
                       return Text(
                           'Error al cargar los datos. Es posible que el usuario se halla eliminado. Contactese con los encargados de la aplicacion.');
                     } else {
