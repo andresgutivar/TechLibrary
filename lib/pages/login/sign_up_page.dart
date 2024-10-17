@@ -305,6 +305,16 @@ class _SingUpPageState extends State<SingUpPage> {
 
   Future<void> _signUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      // Check if user with DNI already exists
+      if (await authService.checkUserExists(_dniController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ya existe un usuario con dicho DNI'),
+          ),
+        );
+        return;
+      }
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('email', _emailController.text);
       await prefs.setString('name', _nameController.text);

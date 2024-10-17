@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -79,5 +80,20 @@ class AuthenticationService {
 
   void signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  Future<bool> checkUserExists(String dni) async {
+    // seach an user with ID = dni
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(dni)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }
