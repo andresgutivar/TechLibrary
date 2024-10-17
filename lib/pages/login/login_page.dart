@@ -1,5 +1,5 @@
 import 'package:biblioteca/services/authentication.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart'; //para verificar cuando se da click al texto de "recuperala"
 import 'package:flutter/material.dart';
 
@@ -20,10 +20,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // check if it is debug mode
-    if (kDebugMode) {
-      authService.signInWithEmailAndPassword(
-          context, "bertolini.diego@gmail.com", "123123123");
-    }
+    // if (kDebugMode) {
+    //   authService.signInWithEmailAndPassword(
+    //       context, "bertolini.diego@gmail.com", "123123123");
+    // }
 
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
 
