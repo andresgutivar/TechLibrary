@@ -196,7 +196,11 @@ class _HomePageState extends State<HomePage> {
                       context,
                       infoLoanPageNew.routeName,
                       arguments: infoLoanPageArguments(
-                          book["lenderId"]!, book["userId"]!),
+                          book["lenderId"]!,
+                          book["userId"]!,
+                          book["isbn"]!,
+                          book["loanDate"]!,
+                          book["returnDate"]!),
                     ),
                   ),
                 )
