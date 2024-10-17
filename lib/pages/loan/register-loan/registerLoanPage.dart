@@ -1,21 +1,33 @@
+import 'package:biblioteca/models/book_model.dart';
+import 'package:biblioteca/models/user_book_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import necesario para los inputFormatters
 
-class RegisterLoanPage extends StatelessWidget {
+class RegisterLoanPage extends StatefulWidget {
   RegisterLoanPage({super.key, required this.codigoISBN});
-
-  // Controladores de texto
-  final TextEditingController _dni = TextEditingController();
-  final TextEditingController _isbnCode = TextEditingController();
-  final TextEditingController _today = TextEditingController();
-  final TextEditingController _dateToReturn = TextEditingController();
-  final TextEditingController _notes = TextEditingController();
 
   final String codigoISBN;
 
-  void _registerBook(BuildContext context) {
+  @override
+  State<RegisterLoanPage> createState() => _RegisterLoanPageState();
+}
+
+class _RegisterLoanPageState extends State<RegisterLoanPage> {
+  // Controladores de texto
+  final TextEditingController _userDni = TextEditingController();
+
+  final TextEditingController _isbnCode = TextEditingController();
+
+  final TextEditingController _today = TextEditingController();
+
+  final TextEditingController _dateToReturn = TextEditingController();
+
+  final TextEditingController _notes = TextEditingController();
+
+  void _registerLoan(BuildContext context) {
     // Verificar que todos los campos excepto notas estén completos
-    if (_dni.text.isEmpty ||
+    if (_userDni.text.isEmpty ||
         _isbnCode.text.isEmpty ||
         _today.text.isEmpty ||
         _dateToReturn.text.isEmpty) {
@@ -26,10 +38,71 @@ class RegisterLoanPage extends StatelessWidget {
         ),
       );
       return;
-    }
+    } else {
+      // Convertir las fechas del formato de texto a DateTime
+      try {
+        // Formato esperado: dd/mm/yyyy
+        List<String> todayParts = _today.text.split('/');
+        DateTime loanDate = DateTime(
+          int.parse(todayParts[2]),
+          int.parse(todayParts[1]),
+          int.parse(todayParts[0]),
+        );
 
-    // Si todos los campos están completos, navegar a la página principal
-    Navigator.pushNamed(context, '/home');
+        List<String> returnParts = _dateToReturn.text.split('/');
+        DateTime returnDate = DateTime(
+          int.parse(returnParts[2]),
+          int.parse(returnParts[1]),
+          int.parse(returnParts[0]),
+        );
+
+        // Convertir DateTime a Timestamp
+        Timestamp loanTimestamp = Timestamp.fromDate(loanDate);
+        Timestamp returnTimestamp = Timestamp.fromDate(returnDate);
+
+        FirebaseFirestore.instance
+            .collection(UserBookModel.tableName)
+            .doc(_userDni.text)
+            .get()
+            .then((documentSnapshot) {
+          if (documentSnapshot.exists) {
+            FirebaseFirestore.instance
+                .collection(BookModel.tableName)
+                .doc(_isbnCode.text)
+                .update({
+              "lenderId":
+                  "33123123", //tengo que hacer que esto se pase directamente por alguna variable global
+              "status": "prestado",
+              "userId": _userDni.text,
+              "returnDate":
+                  returnTimestamp, // Actualizar con el valor de returnDate
+              "loanDate": loanTimestamp, // Actualizar con el valor de loanDate
+            }).then((value) => Navigator.pushNamed(
+                      context,
+                      "/home",
+                    ));
+          } else {
+            // Si el usuario no existe, mostramos un mensaje de error.
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                      'No existe un usuario con este DNI, porfavor ingrese un valor valido o cree al nuevo usuario'),
+                ),
+              );
+            }
+          }
+        });
+      } catch (e) {
+        // Manejar cualquier error en la conversión de fechas
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Por favor, ingresa fechas válidas en el formato dd/mm/yyyy.'),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _selectDate(
@@ -51,7 +124,7 @@ class RegisterLoanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
-    _isbnCode.text = codigoISBN; // Asigna el código ISBN
+    _isbnCode.text = widget.codigoISBN; // Asigna el código ISBN
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +148,7 @@ class RegisterLoanPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildInputField(
-                  _dni,
+                  _userDni,
                   'DNI de usuario',
                   Icons.perm_identity,
                   customColor,
@@ -132,7 +205,7 @@ class RegisterLoanPage extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: () => _registerBook(context),
+                    onPressed: () => _registerLoan(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8FFF7C),
                       foregroundColor: Colors.black,
