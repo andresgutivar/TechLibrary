@@ -124,7 +124,6 @@ class _RegisterLoanPageState extends State<RegisterLoanPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(CurrentUserData.currentDniUser);
     const Color customColor = Color.fromARGB(210, 81, 232, 55);
     _isbnCode.text = widget.codigoISBN; // Asigna el código ISBN
 
