@@ -25,16 +25,15 @@ class _HomePageState extends State<HomePage> {
 
   final _authService = AuthenticationService();
 
-  Stream<List<Map<String, dynamic>>> streamBooks() {
-    return FirebaseFirestore.instance
-        .collection('books')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-    });
-  }
+  late Stream<List<Map<String, dynamic>>> booksFromFilter;
+  Stream<List<Map<String, dynamic>>> booksFromDB = FirebaseFirestore.instance
+      .collection('books')
+      .snapshots()
+      .map((snapshot) {
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  });
 
   void _logOut() {
     //logica para cerrar sesion
@@ -54,6 +53,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    booksFromFilter = booksFromDB;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,32 +70,42 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          _buildSearchBar(), // Coloca el SearchBar aquí
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: streamBooks(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No hay libros registrados');
-                    } else {
-                      return Column(
-                        children: snapshot.data!.map((user) {
-                          return _buildExpansionTileCard(context, user);
-                        }).toList(),
-                      );
-                    }
-                  },
-                ), // Aquí llamamos a nuestro método para crear la tarjeta
-              ],
-            ),
-          ),
+          Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
+
+          StreamBuilder<List<Map<String, dynamic>>>(
+            stream: booksFromFilter,
+            builder: (context, booksFromFilterData) {
+              if (booksFromFilterData.hasError) {
+                return Text('Error: ${booksFromFilterData.error}');
+              } else if (!booksFromFilterData.hasData &&
+                  booksFromFilterData.connectionState !=
+                      ConnectionState.waiting) {
+                return Text(
+                    'Error al cargar los datos. Es posible que el usuario se halla eliminado. Contactese con los encargados de la aplicacion.');
+              } else {
+                // Si no hay errores y los datos estan cargados
+                if (booksFromFilterData.data != null) {
+                  return ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
+                      children: [
+                        Column(
+                          children: booksFromFilterData.data!.map((user) {
+                            return _buildExpansionTileCard(context, user);
+                          }).toList(),
+                        )
+                      ]);
+                } else {
+                  if (booksFromFilterData.connectionState ==
+                      ConnectionState.done) {
+                    return Text("No se encontraron datos");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }
+              }
+            },
+          ), // Aquí llamamos a nuestro método para crear la tarjeta
         ],
       ),
     );
@@ -121,7 +136,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onChanged: (value) {
-            // Aquí puedes manejar el cambio de texto
+            // Filtrar los libros por el valor ingresado
+            setState(() {
+              booksFromFilter = booksFromDB.map((books) {
+                return books.where((book) {
+                  return book["title"].contains(value);
+                }).toList();
+              });
+            });
           },
         ),
       ),
