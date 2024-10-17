@@ -1,3 +1,4 @@
+import 'package:biblioteca/globals/globals.dart';
 import 'package:biblioteca/models/user_model.dart';
 import 'package:biblioteca/pages/user-book/edit_users/edit_user_page.dart';
 import 'package:biblioteca/pages/user-book/new_users/new_user_page.dart';
@@ -75,6 +76,10 @@ class MyApp extends StatelessWidget {
             // If the snapshot has data, it means a user is logged in
             if (snapshot.data != null) {
               if (snapshot.data!.emailVerified) {
+                SharedPreferences.getInstance().then((prefs) {
+                  print(prefs.getString('dni'));
+                  //CurrentUserData.currentDniUser = prefs.getString('dni');
+                });
                 return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {

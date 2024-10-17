@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No users found');
+                      return Text('No hay libros registrados');
                     } else {
                       return Column(
                         children: snapshot.data!.map((user) {
