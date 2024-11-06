@@ -25,20 +25,17 @@ class _HomePageState extends State<HomePage> {
 
   final _authService = AuthenticationService();
 
-  Stream<List<Map<String, dynamic>>> streamBooks() {
-    return FirebaseFirestore.instance
-        .collection('books')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-    });
-  }
+  late Stream<List<Map<String, dynamic>>> booksFromFilter;
+  Stream<List<Map<String, dynamic>>> booksFromDB = FirebaseFirestore.instance
+      .collection('books')
+      .snapshots()
+      .map((snapshot) {
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  });
 
   void _logOut() {
-    //logica para cerrar sesion
-    //Navigator.pushNamed(context, '/login');
     _authService.signOut(context);
   }
 
@@ -54,6 +51,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    booksFromFilter = booksFromDB;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,31 +68,41 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          _buildSearchBar(), // Coloca el SearchBar aquí
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: streamBooks(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No users found');
-                    } else {
-                      return Column(
-                        children: snapshot.data!.map((user) {
-                          return _buildExpansionTileCard(context, user);
-                        }).toList(),
-                      );
-                    }
-                  },
-                ), // Aquí llamamos a nuestro método para crear la tarjeta
-              ],
-            ),
+          Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
+
+          StreamBuilder<List<Map<String, dynamic>>>(
+            stream: booksFromFilter,
+            builder: (context, booksFromFilterData) {
+              if (booksFromFilterData.hasError) {
+                return Text('Error: ${booksFromFilterData.error}');
+              } else if (!booksFromFilterData.hasData &&
+                  booksFromFilterData.connectionState !=
+                      ConnectionState.waiting) {
+                return Text(
+                    'Error al cargar los datos. Existe un problema con la aplicacion. Contactese con los encargados de la aplicacion.');
+              } else {
+                // Si no hay errores y los datos estan cargados
+                if (booksFromFilterData.data != null) {
+                  return ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
+                      children: [
+                        Column(
+                          children: booksFromFilterData.data!.map((user) {
+                            return _buildExpansionTileCard(context, user);
+                          }).toList(),
+                        )
+                      ]);
+                } else {
+                  if (booksFromFilterData.connectionState ==
+                      ConnectionState.done) {
+                    return Text("No se encontraron datos");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }
+              }
+            },
           ),
         ],
       ),
@@ -121,7 +134,23 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onChanged: (value) {
-            // Aquí puedes manejar el cambio de texto
+            // Filtrar los libros por el valor ingresado
+            setState(() {
+              booksFromFilter = booksFromDB.map((books) {
+                return books.where((book) {
+                  return book["title"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase()) ||
+                      book["isbn"].contains(value) ||
+                      book["author"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase()) ||
+                      book["primaryDescriptor"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase());
+                }).toList();
+              });
+            });
           },
         ),
       ),
@@ -215,9 +244,29 @@ class _HomePageState extends State<HomePage> {
                       foregroundColor: Colors.black,
                       elevation: 3,
                     ),
-                    onPressed: () {
-                      deleteBook(book["isbn"]);
-                    },
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      barrierDismissible: false,
+                      useRootNavigator: false,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Estas segura?'),
+                        content: const Text(
+                            'Estas segura que deseas eliminar este libro junto con todos sus datos? ten en cuenta que la informacion no podra recuperarse..'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () => [
+                              deleteBook(book["isbn"]),
+                              Navigator.pop(context, 'Cancel')
+                            ],
+                            child: const Text('Aceptar'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -357,10 +406,29 @@ class myAppBarWidget extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.logout_outlined),
                   color: Colors.black,
-                  onPressed: () {
-                    _authService.signOut(context);
-                  }, // Acción al cerrar sesión
-
+                  onPressed: () => showDialog<String>(
+                    context: context,
+                    barrierDismissible: false,
+                    useRootNavigator: false,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Estas segura?'),
+                      content: const Text(
+                          'estas segura de cerrar sesion en esta cuenta?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () => [
+                            _authService.signOut(context),
+                            Navigator.pop(context, 'Cancel')
+                          ],
+                          child: const Text('Aceptar'),
+                        ),
+                      ],
+                    ),
+                  ),
                   iconSize: 30,
                 ),
               ),

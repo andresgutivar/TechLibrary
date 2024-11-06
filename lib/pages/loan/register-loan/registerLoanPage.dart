@@ -3,6 +3,7 @@ import 'package:biblioteca/models/user_book_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import necesario para los inputFormatters
+import 'package:biblioteca/globals/globals.dart';
 
 class RegisterLoanPage extends StatefulWidget {
   RegisterLoanPage({super.key, required this.codigoISBN});

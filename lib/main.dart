@@ -1,3 +1,4 @@
+import 'package:biblioteca/globals/globals.dart';
 import 'package:biblioteca/models/user_model.dart';
 import 'package:biblioteca/pages/user-book/edit_users/edit_user_page.dart';
 import 'package:biblioteca/pages/user-book/new_users/new_user_page.dart';
@@ -75,6 +76,20 @@ class MyApp extends StatelessWidget {
             // If the snapshot has data, it means a user is logged in
             if (snapshot.data != null) {
               if (snapshot.data!.emailVerified) {
+                // El usuario ya esta loggeado y verificado
+
+                // Ir a buscar el DNI del usuario, mediante el UID
+                FirebaseFirestore.instance
+                    .collection(UserModel.tableName)
+                    .where("uid", isEqualTo: snapshot.data!.uid)
+                    .get()
+                    .then(
+                  (querySnapshot) {
+                    CurrentUserData.currentDniUser =
+                        querySnapshot.docs[0].data()['dni'];
+                  },
+                  onError: (e) => print("Error completing: $e"),
+                );
                 return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {
