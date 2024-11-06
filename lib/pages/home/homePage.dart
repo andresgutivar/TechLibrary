@@ -36,8 +36,6 @@ class _HomePageState extends State<HomePage> {
   });
 
   void _logOut() {
-    //logica para cerrar sesion
-    //Navigator.pushNamed(context, '/login');
     _authService.signOut(context);
   }
 
@@ -81,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                   booksFromFilterData.connectionState !=
                       ConnectionState.waiting) {
                 return Text(
-                    'Error al cargar los datos. Es posible que el usuario se halla eliminado. Contactese con los encargados de la aplicacion.');
+                    'Error al cargar los datos. Existe un problema con la aplicacion. Contactese con los encargados de la aplicacion.');
               } else {
                 // Si no hay errores y los datos estan cargados
                 if (booksFromFilterData.data != null) {
@@ -105,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 }
               }
             },
-          ), // Aquí llamamos a nuestro método para crear la tarjeta
+          ),
         ],
       ),
     );
@@ -140,7 +138,16 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               booksFromFilter = booksFromDB.map((books) {
                 return books.where((book) {
-                  return book["title"].contains(value);
+                  return book["title"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase()) ||
+                      book["isbn"].contains(value) ||
+                      book["author"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase()) ||
+                      book["primaryDescriptor"]
+                          .toLowerCase()
+                          .contains(value.toLowerCase());
                 }).toList();
               });
             });
@@ -237,9 +244,29 @@ class _HomePageState extends State<HomePage> {
                       foregroundColor: Colors.black,
                       elevation: 3,
                     ),
-                    onPressed: () {
-                      deleteBook(book["isbn"]);
-                    },
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      barrierDismissible: false,
+                      useRootNavigator: false,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Estas segura?'),
+                        content: const Text(
+                            'Estas segura que deseas eliminar este libro junto con todos sus datos? ten en cuenta que la informacion no podra recuperarse..'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () => [
+                              deleteBook(book["isbn"]),
+                              Navigator.pop(context, 'Cancel')
+                            ],
+                            child: const Text('Aceptar'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -379,10 +406,29 @@ class myAppBarWidget extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.logout_outlined),
                   color: Colors.black,
-                  onPressed: () {
-                    _authService.signOut(context);
-                  }, // Acción al cerrar sesión
-
+                  onPressed: () => showDialog<String>(
+                    context: context,
+                    barrierDismissible: false,
+                    useRootNavigator: false,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Estas segura?'),
+                      content: const Text(
+                          'estas segura de cerrar sesion en esta cuenta?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () => [
+                            _authService.signOut(context),
+                            Navigator.pop(context, 'Cancel')
+                          ],
+                          child: const Text('Aceptar'),
+                        ),
+                      ],
+                    ),
+                  ),
                   iconSize: 30,
                 ),
               ),
