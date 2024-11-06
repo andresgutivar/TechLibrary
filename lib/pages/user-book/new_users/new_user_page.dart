@@ -25,7 +25,7 @@ class _NewUserPageState extends State<NewUserPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _year = TextEditingController();
   final TextEditingController _div = TextEditingController();
-  final TextEditingController _specialty = TextEditingController();
+  final TextEditingController _career = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class _NewUserPageState extends State<NewUserPage> {
             _year.text.isEmpty ||
             _div.text.isEmpty ||
             _email.text.isEmpty ||
-            (yearValue >= 3 && _specialty.text.isEmpty)) {
+            (yearValue >= 3 && _career.text.isEmpty)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content:
@@ -121,6 +121,7 @@ class _NewUserPageState extends State<NewUserPage> {
           return;
         } else {
           UserBookModel user = UserBookModel(
+            rol: "estudiante",
             name: _name.text,
             lastName: _lastName.text,
             dni: _dni.text,
@@ -128,16 +129,38 @@ class _NewUserPageState extends State<NewUserPage> {
             email: _email.text,
             year: _year.text,
             div: _div.text,
-            specialty: _specialty.text,
+            career: _career.text,
           );
           saveToFireBase(user);
         }
       } else {
         //logica para el profesor
+
+        if (_name.text.isEmpty ||
+            _lastName.text.isEmpty ||
+            _dni.text.isEmpty ||
+            _email.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Por favor, completa todos los campos obligatorios.'),
+            ),
+          );
+          return;
+        } else {
+          UserBookModel user = UserBookModel(
+            rol: "docente",
+            name: _name.text,
+            lastName: _lastName.text,
+            dni: _dni.text,
+            phone: _phone.text,
+            email: _email.text,
+          );
+          saveToFireBase(user);
+        }
       }
     }
 
-    print(args.userType.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nuevo usuario'),
@@ -166,9 +189,6 @@ class _NewUserPageState extends State<NewUserPage> {
                 _buildTextField(
                     _email, 'Email', Icons.email, NewUserPage.customColor),
                 const SizedBox(height: 16),
-
-                // args.userType == "estudiante" ? _buildTextField(
-                //     _phone, 'Teléfono', Icons.phone, NewUserPage.customColor):
                 if (args.userType == UserType.alumno) ...[
                   _buildTextField(
                       _year, 'anio', Icons.person, NewUserPage.customColor,
@@ -178,7 +198,7 @@ class _NewUserPageState extends State<NewUserPage> {
                       _div, 'divicion', Icons.school, NewUserPage.customColor,
                       isNumeric: true),
                   const SizedBox(height: 16),
-                  _buildTextField(_specialty, 'especialidad', Icons.star,
+                  _buildTextField(_career, 'especialidad', Icons.star,
                       NewUserPage.customColor),
                   const SizedBox(height: 16),
                 ],
@@ -251,7 +271,9 @@ class _NewUserPageState extends State<NewUserPage> {
     _lastName.dispose();
     _dni.dispose();
     _phone.dispose();
-
+    _div.dispose();
+    _email.dispose();
+    _year.dispose();
     super.dispose();
   }
 }

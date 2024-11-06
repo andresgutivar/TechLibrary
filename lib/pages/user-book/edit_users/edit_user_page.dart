@@ -30,7 +30,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
     FirebaseFirestore.instance
         .collection(UserBookModel.tableName)
-        .doc(args.dni)
+        .doc(args.user["dni"])
         .withConverter(
           fromFirestore: UserBookModel.fromFirestore,
           toFirestore: (UserBookModel user, options) => user.toFirestore(),
@@ -56,7 +56,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
       FirebaseFirestore.instance
           .collection(UserBookModel.tableName)
-          .doc(args.dni)
+          .doc(args.user["dni"])
           .withConverter(
             fromFirestore: UserBookModel.fromFirestore,
             toFirestore: (UserBookModel user, options) => user.toFirestore(),

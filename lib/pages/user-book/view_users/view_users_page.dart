@@ -192,7 +192,7 @@ class _ViewUsersPageState extends State<ViewUsersPage> {
                   onPressed: () => Navigator.pushNamed(
                     context,
                     EditUserPage.routeName,
-                    arguments: EditUserPageArguments(user["dni"]!),
+                    arguments: EditUserPageArguments(user),
                   ),
                 ),
               ),

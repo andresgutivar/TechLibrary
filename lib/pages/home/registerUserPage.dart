@@ -11,7 +11,7 @@
 //   final TextEditingController _address = TextEditingController();
 //   final TextEditingController _academyYear = TextEditingController();
 //   final TextEditingController _division = TextEditingController();
-//   final TextEditingController _specialty = TextEditingController();
+//   final TextEditingController _career = TextEditingController();
 
 //   final List<String> _userTypes = ['Alumno', 'Profesor'];
 //   String _selectedUserType = '';
@@ -110,7 +110,7 @@
 //                 _buildTextField(
 //                     _division, 'División', Icons.class_outlined, customColor),
 //                 const SizedBox(height: 16),
-//                 _buildTextField(_specialty, 'Especialidad', Icons.work_outline,
+//                 _buildTextField(_career, 'Especialidad', Icons.work_outline,
 //                     customColor),
 //                 const SizedBox(height: 16),
 //                 SizedBox(
