@@ -22,43 +22,122 @@ class _NewUserPageState extends State<NewUserPage> {
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _dni = TextEditingController();
   final TextEditingController _phone = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _year = TextEditingController();
+  final TextEditingController _div = TextEditingController();
+  final TextEditingController _specialty = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as NewUserPageArguments;
 
-    void saveUser() {
-      UserBookModel user = UserBookModel(
-        name: _name.text,
-        lastName: _lastName.text,
-        dni: _dni.text,
-        phone: _phone.text,
-      );
-
+    void saveToFireBase(user) {
       FirebaseFirestore.instance
           .collection(UserBookModel.tableName)
-          .doc(_dni.text)
-          .withConverter(
-            fromFirestore: UserBookModel.fromFirestore,
-            toFirestore: (UserBookModel user, options) => user.toFirestore(),
-          )
-          .set(user)
+          .doc(user.dni)
+          .get()
           .then((documentSnapshot) {
-        if (context.mounted) {
-          Navigator.of(context).pop();
+        if (documentSnapshot.exists) {
+          // Si el documento ya existe, mostramos un mensaje de error.
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Ya existe un usuario con este DNI.'),
+              ),
+            );
+          }
+        } else {
+          FirebaseFirestore.instance
+              .collection(UserBookModel.tableName)
+              .doc(_dni.text)
+              .withConverter(
+                fromFirestore: UserBookModel.fromFirestore,
+                toFirestore: (UserBookModel user, options) =>
+                    user.toFirestore(),
+              )
+              .set(user)
+              .then((_) {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          }).catchError((err) {
+            print(err);
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Error al guardar los datos del usuario.'),
+                ),
+              );
+            }
+          });
         }
       }).catchError((err) {
+        print(err);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Error al guardar los datos del usuario.'),
+              content: Text('Error al verificar la existencia del usuario.'),
             ),
           );
         }
       });
     }
 
+    void saveUser() {
+      // UserBookModel user = UserBookModel(
+      //   name: _name.text,
+      //   lastName: _lastName.text,
+      //   dni: _dni.text,
+      //   phone: _phone.text,
+      // );
+
+      if (args.userType == UserType.alumno) {
+        int yearValue = 0;
+        if (_year.text.isNotEmpty) {
+          yearValue = int.parse(_year.text);
+        }
+
+        if (_name.text.isEmpty ||
+            _lastName.text.isEmpty ||
+            _dni.text.isEmpty ||
+            _year.text.isEmpty ||
+            _div.text.isEmpty ||
+            _email.text.isEmpty ||
+            (yearValue >= 3 && _specialty.text.isEmpty)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Por favor, completa todos los campos obligatorios.'),
+            ),
+          );
+          return;
+        } else if (yearValue > 6) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Por favor, ingrese un valor valido para el anio.'),
+            ),
+          );
+          return;
+        } else {
+          UserBookModel user = UserBookModel(
+            name: _name.text,
+            lastName: _lastName.text,
+            dni: _dni.text,
+            phone: _phone.text,
+            email: _email.text,
+            year: _year.text,
+            div: _div.text,
+            specialty: _specialty.text,
+          );
+          saveToFireBase(user);
+        }
+      } else {
+        //logica para el profesor
+      }
+    }
+
+    print(args.userType.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nuevo usuario'),
@@ -84,6 +163,25 @@ class _NewUserPageState extends State<NewUserPage> {
                 _buildTextField(
                     _phone, 'Teléfono', Icons.phone, NewUserPage.customColor),
                 const SizedBox(height: 16),
+                _buildTextField(
+                    _email, 'Email', Icons.email, NewUserPage.customColor),
+                const SizedBox(height: 16),
+
+                // args.userType == "estudiante" ? _buildTextField(
+                //     _phone, 'Teléfono', Icons.phone, NewUserPage.customColor):
+                if (args.userType == UserType.alumno) ...[
+                  _buildTextField(
+                      _year, 'anio', Icons.person, NewUserPage.customColor,
+                      isNumeric: true),
+                  const SizedBox(height: 16),
+                  _buildTextField(
+                      _div, 'divicion', Icons.school, NewUserPage.customColor,
+                      isNumeric: true),
+                  const SizedBox(height: 16),
+                  _buildTextField(_specialty, 'especialidad', Icons.star,
+                      NewUserPage.customColor),
+                  const SizedBox(height: 16),
+                ],
                 SizedBox(
                   width: 300,
                   child: ElevatedButton(
