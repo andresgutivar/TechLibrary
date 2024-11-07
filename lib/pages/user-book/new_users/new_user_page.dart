@@ -205,7 +205,8 @@ class _NewUserPageState extends State<NewUserPage> {
                     NewUserPage.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(
-                    _dni, 'DNI', Icons.credit_card, NewUserPage.customColor),
+                    _dni, 'DNI', Icons.credit_card, NewUserPage.customColor,
+                    isNumeric: true),
                 const SizedBox(height: 16),
                 _buildTextField(
                     _phone, 'Teléfono', Icons.phone, NewUserPage.customColor),
