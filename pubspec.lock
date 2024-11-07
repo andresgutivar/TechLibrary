@@ -328,6 +328,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  select_searchable_list:
+    dependency: "direct main"
+    description:
+      name: select_searchable_list
+      sha256: b102cc915516705337637af601037827d431243f7b523f886c21d487f7f395e9
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   shared_preferences:
     dependency: "direct main"
     description:
