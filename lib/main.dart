@@ -134,15 +134,7 @@ class MyApp extends StatelessWidget {
             },
           );
         }
-        if (settings.name == '/editBookPage') {
-          final Map<String, dynamic> book =
-              settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) {
-              return EditBookPage(book: book);
-            },
-          );
-        }
+
         if (settings.name == '/informationBook') {
           final Map<String, dynamic> book =
               settings.arguments as Map<String, dynamic>;

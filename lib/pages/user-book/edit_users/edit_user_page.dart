@@ -206,9 +206,9 @@ class _EditUserPageState extends State<EditUserPage> {
   final TextEditingController _year = TextEditingController();
   final TextEditingController _div = TextEditingController();
   final TextEditingController _career = TextEditingController();
-  //final List<int> _selectedYear = [1];
+
   final Map<int, String> _listYears = {
-    1: 'Seleccionar anio',
+    1: 'Seleccionar año',
     2: '1',
     3: '2',
     4: '3',
@@ -216,40 +216,64 @@ class _EditUserPageState extends State<EditUserPage> {
     6: '5',
     7: '6',
   };
-  //final List<int> _selectedCareer = [1];
 
   final Map<int, String> _listCareer = {
     1: 'Seleccionar especialidad',
     2: 'Computacion',
     3: 'Construccion',
-    4: 'Electronica',
+    4: 'Electrónica',
     5: 'Electricidad',
-    6: 'Mecanica',
-    7: 'Quimica',
+    6: 'Mecánica',
+    7: 'Química',
   };
+
+  late List<int> _selectedYear;
+  late List<int> _selectedCareer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Usamos addPostFrameCallback para esperar a que se monte el widget y poder acceder a los argumentos
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as EditUserPageArguments;
+
+      // Inicializar controladores y listas con valores de los argumentos
+      _name.text = args.user["name"];
+      _lastName.text = args.user["lastName"];
+      _email.text = args.user["email"];
+      _phone.text = args.user["phone"];
+      _div.text = args.user["div"];
+      _dni.text = args.user["dni"];
+      _career.text = args.user["career"];
+      _year.text = args.user["year"];
+
+      _selectedYear = _listYears.entries
+          .where((entry) => entry.value == args.user["year"])
+          .map((entry) => entry.key)
+          .toList();
+      // _selectedCareer = _listCareer.entries
+      //     .where((entry) => entry.value == args.user["career"])
+      //     .map((entry) => entry.key)
+      //     .toList();
+      if (args.user["career"] != _listCareer[1]) {
+        _selectedCareer = _listCareer.entries
+            .where((entry) => entry.value == args.user["career"])
+            .map((entry) => entry.key)
+            .toList();
+      } else {
+        _selectedCareer = [1];
+      }
+
+      setState(() {}); // Para actualizar la interfaz si es necesario
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as EditUserPageArguments;
-
-    _year.text = args.user["year"];
-    _name.text = args.user["name"];
-    _lastName.text = args.user["lastName"];
-    _email.text = args.user["email"];
-    _phone.text = args.user["phone"];
-    _div.text = args.user["div"];
-    _dni.text = args.user["dni"];
-    _career.text = args.user["career"];
-    final List<int> _selectedYear = _listYears.entries
-        .where((entry) => entry.value == args.user["year"])
-        .map((entry) => entry.key)
-        .toList();
-
-    final List<int> _selectedCareer = _listCareer.entries
-        .where((entry) => entry.value == args.user["career"])
-        .map((entry) => entry.key)
-        .toList();
 
     void saveToFireBase(UserBookModel user) {
       // Mostrar el indicador de progreso
@@ -279,7 +303,7 @@ class _EditUserPageState extends State<EditUserPage> {
                     .toFirestore()) // `user.toFirestore()` convierte `user` a Map
                 .then((_) {
               if (context.mounted) {
-                //Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); // Cerrar el diálogo
                 Navigator.of(context).pop(); // Volver a la página anterior
               }
             }).catchError((error) {
@@ -289,7 +313,7 @@ class _EditUserPageState extends State<EditUserPage> {
                   const SnackBar(
                       content: Text('Error al actualizar el usuario.')),
                 );
-                //Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); // Cerrar el diálogo
                 return;
               }
             });
@@ -302,7 +326,7 @@ class _EditUserPageState extends State<EditUserPage> {
                       'Ya existe un usuario con el mismo DNI. Por favor, cámbialo.'),
                 ),
               );
-              //Navigator.of(context).pop(); // Cerrar el diálogo
+              Navigator.of(context).pop(); // Cerrar el diálogo
               return;
             }
           }
@@ -368,14 +392,13 @@ class _EditUserPageState extends State<EditUserPage> {
             ),
           );
           return;
-        } else if (yearValue > 6) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Por favor, ingrese un valor válido para el año.'),
-            ),
-          );
-          return;
         } else {
+          String? careerFinal;
+          if (yearValue >= 3) {
+            careerFinal = _career.text;
+          } else {
+            careerFinal = _listCareer[1];
+          }
           final user = UserBookModel(
             rol: "estudiante",
             name: _name.text,
@@ -385,7 +408,7 @@ class _EditUserPageState extends State<EditUserPage> {
             email: _email.text,
             year: _year.text,
             div: _div.text,
-            career: _career.text,
+            career: careerFinal,
           );
           saveToFireBase(user);
         }
@@ -417,7 +440,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nuevo usuario'),
+        title: const Text('editar usuario'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
