@@ -24,8 +24,7 @@ class _NewUserPageState extends State<NewUserPage> {
   final TextEditingController _dni = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _email = TextEditingController();
-  final TextEditingController _year =
-      TextEditingController(text: "Seleccionar anio");
+  final TextEditingController _year = TextEditingController();
   final TextEditingController _div = TextEditingController();
   final TextEditingController _career = TextEditingController();
   final List<int> _selectedYear = [1];
