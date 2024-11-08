@@ -232,8 +232,15 @@ class _EditUserPageState extends State<EditUserPage> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as EditUserPageArguments;
+
     _year.text = args.user["year"];
     _name.text = args.user["name"];
+    _lastName.text = args.user["lastName"];
+    _email.text = args.user["email"];
+    _phone.text = args.user["phone"];
+    _div.text = args.user["div"];
+    _dni.text = args.user["dni"];
+    _career.text = args.user["career"];
     final List<int> _selectedYear = _listYears.entries
         .where((entry) => entry.value == args.user["year"])
         .map((entry) => entry.key)
@@ -251,7 +258,7 @@ class _EditUserPageState extends State<EditUserPage> {
         barrierDismissible:
             false, // Evita cerrar el diálogo tocando fuera de él
         builder: (BuildContext context) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },
@@ -263,31 +270,66 @@ class _EditUserPageState extends State<EditUserPage> {
           .get()
           .then((documentSnapshot) {
         if (documentSnapshot.exists) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Ya existe un usuario con este DNI.'),
-              ),
-            );
-            Navigator.of(context).pop(); // Cerrar el diálogo
+          if (user.dni == args.user["dni"]) {
+            // Actualizar el documento si el DNI coincide
+            FirebaseFirestore.instance
+                .collection(UserBookModel.tableName)
+                .doc(user.dni)
+                .update(user
+                    .toFirestore()) // `user.toFirestore()` convierte `user` a Map
+                .then((_) {
+              if (context.mounted) {
+                //Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); // Volver a la página anterior
+              }
+            }).catchError((error) {
+              debugPrint("Error al actualizar el documento: $error");
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Error al actualizar el usuario.')),
+                );
+                //Navigator.of(context).pop(); // Cerrar el diálogo
+                return;
+              }
+            });
+          } else {
+            // Si existe un usuario con el mismo DNI y no coincide con el actual
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                      'Ya existe un usuario con el mismo DNI. Por favor, cámbialo.'),
+                ),
+              );
+              //Navigator.of(context).pop(); // Cerrar el diálogo
+              return;
+            }
           }
         } else {
+          // Si el documento no existe, crear y luego eliminar el anterior
           FirebaseFirestore.instance
               .collection(UserBookModel.tableName)
               .doc(user.dni)
               .set(user.toFirestore())
               .then((_) {
+            // Eliminar el documento especificado
+            return FirebaseFirestore.instance
+                .collection(UserBookModel.tableName)
+                .doc(args.user["dni"])
+                .delete();
+          }).then((_) {
             if (context.mounted) {
               Navigator.of(context).pop(); // Cerrar el diálogo
               Navigator.of(context).pop(); // Volver a la página anterior
             }
           }).catchError((err) {
-            debugPrint("Error al guardar usuario: $err");
+            debugPrint("Error al procesar usuario: $err");
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Error al guardar los datos del usuario.'),
-                ),
+                    content: Text(
+                        'Error al guardar o eliminar los datos del usuario.')),
               );
               Navigator.of(context).pop(); // Cerrar el diálogo
             }
@@ -298,8 +340,7 @@ class _EditUserPageState extends State<EditUserPage> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Error al verificar la existencia del usuario.'),
-            ),
+                content: Text('Error al verificar la existencia del usuario.')),
           );
           Navigator.of(context).pop(); // Cerrar el diálogo
         }
