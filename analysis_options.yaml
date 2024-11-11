@@ -13,6 +13,7 @@ analyzer:
     prefer_const_literals_to_create_immutables: ignore
     prefer_interpolation_to_compose_strings: ignore
     sized_box_for_whitespace: ignore
+    unrelated_type_equality_checks: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

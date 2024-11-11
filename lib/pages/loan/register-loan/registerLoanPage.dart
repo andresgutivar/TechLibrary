@@ -71,8 +71,8 @@ class _RegisterLoanPageState extends State<RegisterLoanPage> {
                 .collection(BookModel.tableName)
                 .doc(_isbnCode.text)
                 .update({
-              "lenderId":
-                  "33123123", //tengo que hacer que esto se pase directamente por alguna variable global
+              "lenderId": CurrentUserData
+                  .currentDniUser, //tengo que hacer que esto se pase directamente por alguna variable global
               "status": "prestado",
               "userId": _userDni.text,
               "returnDate":

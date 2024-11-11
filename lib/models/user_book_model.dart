@@ -7,8 +7,22 @@ class UserBookModel {
   final String? lastName;
   final String? dni;
   final String? phone;
+  final String? email;
+  final String? year;
+  final String? div;
+  final String? career;
+  final String? rol;
 
-  UserBookModel({this.name, this.lastName, this.dni, this.phone});
+  UserBookModel(
+      {this.name,
+      this.lastName,
+      this.dni,
+      this.phone,
+      this.email,
+      this.year,
+      this.div,
+      this.career,
+      this.rol});
 
   factory UserBookModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -16,11 +30,15 @@ class UserBookModel {
   ) {
     final data = snapshot.data();
     return UserBookModel(
-      name: data?['name'],
-      lastName: data?['lastName'],
-      dni: data?['dni'],
-      phone: data?['phone'],
-    );
+        name: data?['name'],
+        lastName: data?['lastName'],
+        dni: data?['dni'],
+        phone: data?['phone'],
+        email: data?['email'],
+        year: data?['year'],
+        div: data?['div'],
+        career: data?['career'],
+        rol: data?['rol']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -28,7 +46,12 @@ class UserBookModel {
       if (name != null) "name": name,
       if (lastName != null) "lastName": lastName,
       if (dni != null) "dni": dni,
-      if (phone != null) "phone": phone,
+      if (rol != null) "rol": rol,
+      if (email != null) "email": email,
+      if (phone != null) "phone": phone else "phone": "",
+      if (year != null) "year": year else "year": "",
+      if (div != null) "div": div else "div": "",
+      if (career != null) "career": career else "career": "",
     };
   }
 }

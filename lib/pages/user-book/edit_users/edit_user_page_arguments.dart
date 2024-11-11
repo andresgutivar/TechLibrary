@@ -1,5 +1,5 @@
 class EditUserPageArguments {
-  final String dni;
+  final Map<String, dynamic> user;
 
-  EditUserPageArguments(this.dni);
+  EditUserPageArguments(this.user);
 }
