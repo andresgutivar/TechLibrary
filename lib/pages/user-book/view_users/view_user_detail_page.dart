@@ -1,5 +1,5 @@
 import 'package:biblioteca/models/user_book_model.dart';
-import 'package:biblioteca/pages/book/details-book/bookInformationPage.dart';
+
 import 'package:biblioteca/pages/user-book/view_users/view_user_detail_page_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +72,29 @@ class ViewUserDetailPage extends StatelessWidget {
                             text: 'Teléfono',
                             value: user.phone!,
                             customColor: customColor),
+                        SizedBox(height: 16),
+                        MyText(
+                            text: 'Rol',
+                            value: user.rol!,
+                            customColor: customColor),
+                        SizedBox(height: 16),
+                        if (user.rol == "estudiante") ...[
+                          MyText(
+                              text: 'Curso',
+                              value: user.year!,
+                              customColor: customColor),
+                          SizedBox(height: 16),
+                          MyText(
+                              text: 'Divicion',
+                              value: user.div!,
+                              customColor: customColor),
+                          SizedBox(height: 16),
+                          if (int.parse(user.year!) >= 3)
+                            MyText(
+                                text: 'Especialidad',
+                                value: user.career!,
+                                customColor: customColor),
+                        ]
                       ]);
                     }
                   },
@@ -83,5 +106,41 @@ class ViewUserDetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyText extends StatelessWidget {
+  final String text;
+  final String value;
+  final Color customColor;
+  const MyText(
+      {super.key,
+      required this.text,
+      required this.value,
+      required this.customColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Container(
+          width: 800,
+          //height: 80,
+          decoration: BoxDecoration(
+            color: customColor,
+            border: Border.all(color: Colors.green, width: 2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            text + ' : ' + value,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black,
+            ),
+          ),
+        ));
   }
 }
