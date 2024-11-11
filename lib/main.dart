@@ -20,7 +20,7 @@ import 'pages/book/new-book/registerbookPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biblioteca/pages/book/details-book/bookInformationPage.dart';
-import 'package:biblioteca/pages/book/edit-book/editBookPage.dart';
+//import 'package:biblioteca/pages/book/edit-book/editBookPageNew.dart';
 import 'package:biblioteca/pages/loan/register-loan/registerLoanPage.dart';
 import 'package:biblioteca/pages/loan/view-loan/infoLoanPageNew.dart';
 import 'pages/book/edit-book/editBookPageNew.dart';
