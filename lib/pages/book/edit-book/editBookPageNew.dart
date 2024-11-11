@@ -82,35 +82,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
     // );
     final args =
         ModalRoute.of(context)!.settings.arguments as EditBookPageArguments;
-    // FirebaseFirestore.instance
-    //     .collection(BookModel.tableName)
-    //     .doc(args.isbn)
-    //     .withConverter(
-    //       fromFirestore: BookModel.fromFirestore,
-    //       toFirestore: (BookModel book, options) => book.toFirestore(),
-    //     )
-    //     .get()
-    //     .then((DocumentSnapshot documentSnapshot) {
-    //   if (documentSnapshot.exists) {
-    //     BookModel book = documentSnapshot.data()! as BookModel;
-    //     _tittle.text = book.title!;
-    //     _editorial.text = book.editorial!;
-    //     _author.text = book.author!;
-    //     _location.text = book.location!;
-    //     finalEntryDate = book.entryDate!.toDate();
-    //     _entryDate.text =
-    //         "${finalEntryDate.day}/${finalEntryDate.month}/${finalEntryDate.year}";
-    //     _primaryDescriptor.text = book.primaryDescriptor!;
-    //     _numberPages.text = book.pagination!;
-    //     _isbnCode.text = book.isbn!;
-    //     _secondaryDescriptor.text = book.secondaryDescriptor!;
-    //     _editingPlace.text = book.editingPlace!;
-    //     _edition.text = book.edition!;
-    //     _yearEdition.text = book.yearEdition!;
-    //     _notes.text = book.notes!;
-    //   }
-    //   //Navigator.of(context).pop(); // Cerrar el diálogo
-    // });
+
     Future<void> updateBook() async {
       //print("entraste");
       showDialog(
@@ -159,16 +131,6 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
           yearEdition: _yearEdition.text,
         );
 
-        // FirebaseFirestore.instance
-        //     .collection(BookModel.tableName)
-        //     .doc(_isbnCode.text)
-        //     .withConverter(
-        //       fromFirestore: BookModel.fromFirestore,
-        //       toFirestore: (BookModel auxBook, options) =>
-        //           auxBook.toFirestore(),
-        //     )
-        //     .get()
-        //     .then((DocumentSnapshot documentSnapshot) {
         final ref = FirebaseFirestore.instance
             .collection(BookModel.tableName)
             .doc(_isbnCode.text)
@@ -178,7 +140,6 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
                   auxBook.toFirestore(),
             );
         final docSnap = await ref.get();
-        //BookModel auxBook = docSnap.data()!;
 
         if (docSnap.data() != null && docSnap["isbn"] != args.isbn) {
           ScaffoldMessenger.of(context).showSnackBar(
