@@ -92,30 +92,7 @@ class MyAppBarWidget extends StatelessWidget {
                         child: IconButton(
                           icon: const Icon(Icons.logout_outlined),
                           color: Colors.black,
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            barrierDismissible: false,
-                            useRootNavigator: false,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('¿Estás seguro?'),
-                              content: const Text(
-                                  '¿Estás seguro de cerrar sesión en esta cuenta?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancelar'),
-                                ),
-                                TextButton(
-                                  onPressed: () => [
-                                    _authService.signOut(context),
-                                    Navigator.pop(context, 'Cancel')
-                                  ],
-                                  child: const Text('Aceptar'),
-                                ),
-                              ],
-                            ),
-                          ),
+                          onPressed: () => _showLogoutDialog(context),
                           iconSize: 30,
                         ),
                       ),
@@ -126,56 +103,11 @@ class MyAppBarWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       const Text("Menu", style: TextStyle(color: Colors.black)),
-                      PopupMenuButton<String>(
+                      IconButton(
                         icon: Icon(Icons.more_vert, color: Colors.black),
-                        onSelected: (String route) {
-                          if (route == 'logout') {
-                            showDialog<String>(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('¿Estás seguro?'),
-                                content: const Text(
-                                    '¿Estás seguro de cerrar sesión en esta cuenta?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      _authService.signOut(context);
-                                      Navigator.pop(context, 'Cancel');
-                                    },
-                                    child: const Text('Aceptar'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            Navigator.pushNamed(context, route);
-                          }
+                        onPressed: () {
+                          _showDropdownMenu(context);
                         },
-                        itemBuilder: (BuildContext context) => [
-                          PopupMenuItem<String>(
-                            value: NewUserTypeSelectionPage.routeName,
-                            child: Text('Agregar usuario'),
-                          ),
-                          PopupMenuItem<String>(
-                            value: ViewUsersPage.routeName,
-                            child: Text('Usuarios'),
-                          ),
-                          PopupMenuItem<String>(
-                            value: '/registerBook',
-                            child: Text('Agregar libro'),
-                          ),
-                          const PopupMenuDivider(),
-                          PopupMenuItem<String>(
-                            value: 'logout',
-                            child: Text('Cerrar sesión'),
-                          ),
-                        ],
                       ),
                     ],
                   );
@@ -189,6 +121,124 @@ class MyAppBarWidget extends StatelessWidget {
             color: Colors.black,
           ),
         ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: false,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('¿Estás seguro?'),
+        content: const Text('¿Estás seguro de cerrar sesión en esta cuenta?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => [
+              _authService.signOut(context),
+              Navigator.pop(context, 'Cancel')
+            ],
+            child: const Text('Aceptar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDropdownMenu(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Botón de cerrar en la esquina superior derecha
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                // Elementos del menú
+                MenuButton(
+                  label: 'Agregar usuario',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                        context, NewUserTypeSelectionPage.routeName);
+                  },
+                ),
+                MenuButton(
+                  label: 'Usuarios',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, ViewUsersPage.routeName);
+                  },
+                ),
+                MenuButton(
+                  label: 'Agregar libro',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/registerBook');
+                  },
+                ),
+                const Divider(),
+                MenuButton(
+                  label: 'Cerrar sesión',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MenuButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  static const Color customColor = Color.fromARGB(210, 81, 232, 55);
+  const MenuButton({required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 12.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: customColor // Cambia el color según el diseño
+              ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+          ),
+        ),
       ),
     );
   }
