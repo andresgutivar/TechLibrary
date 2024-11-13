@@ -58,59 +58,57 @@ class _HomePageState extends State<HomePage> {
     booksFromFilter = booksFromDB;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: MyAppBarWidget(
-            customColor: customColor,
-            backgroundColorOptions: backgroundColorOptions,
-          ),
-          automaticallyImplyLeading: false,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: MyAppBarWidget(
+        customColor: customColor,
+        backgroundColorOptions: backgroundColorOptions,
+      ),
+      automaticallyImplyLeading: false,
+    ),
+    body: Column(
+      children: [
+        Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
 
-              StreamBuilder<List<Map<String, dynamic>>>(
-                stream: booksFromFilter,
-                builder: (context, booksFromFilterData) {
-                  if (booksFromFilterData.hasError) {
-                    return Text('Error: ${booksFromFilterData.error}');
-                  } else if (!booksFromFilterData.hasData &&
-                      booksFromFilterData.connectionState !=
-                          ConnectionState.waiting) {
-                    return Text(
-                        'Error al cargar los datos. Existe un problema con la aplicacion. Contactese con los encargados de la aplicacion.');
+        // Usar un Expanded o Flexible para que el ListView ocupe el espacio restante
+        Expanded(
+          child: StreamBuilder<List<Map<String, dynamic>>>( 
+            stream: booksFromFilter,
+            builder: (context, booksFromFilterData) {
+              if (booksFromFilterData.hasError) {
+                return Text('Error: ${booksFromFilterData.error}');
+              } else if (!booksFromFilterData.hasData &&
+                  booksFromFilterData.connectionState != ConnectionState.waiting) {
+                return Text(
+                    'Error al cargar los datos. Existe un problema con la aplicación. Contactese con los encargados de la aplicación.');
+              } else {
+                // Si no hay errores y los datos están cargados
+                if (booksFromFilterData.data != null) {
+                  return ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8.0),
+                    children: booksFromFilterData.data!.map((user) {
+                      return _buildExpansionTileCard(context, user);
+                    }).toList(),
+                  );
+                } else {
+                  if (booksFromFilterData.connectionState == ConnectionState.done) {
+                    return Text("No se encontraron datos");
                   } else {
-                    // Si no hay errores y los datos estan cargados
-                    if (booksFromFilterData.data != null) {
-                      return ListView(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.all(8.0),
-                          children: [
-                            Column(
-                              children: booksFromFilterData.data!.map((user) {
-                                return _buildExpansionTileCard(context, user);
-                              }).toList(),
-                            )
-                          ]);
-                    } else {
-                      if (booksFromFilterData.connectionState ==
-                          ConnectionState.done) {
-                        return Text("No se encontraron datos");
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    }
+                    return SingleChildScrollView(child:CircularProgressIndicator() ,) ;
+                    
                   }
-                },
-              ),
-            ],
+                }
+              }
+            },
           ),
-        ));
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildSearchBar() {
     return Padding(
