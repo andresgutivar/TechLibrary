@@ -27,6 +27,16 @@ class RegisterBookPageState extends State<RegisterBookPage> {
   @override
   Widget build(BuildContext context) {
     void registerBook() {
+      showDialog(
+        context: context,
+        barrierDismissible:
+            false, // Evita cerrar el diálogo tocando fuera de él
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
       //print("entraste");
       if (_tittle.text.isEmpty ||
           _editorial.text.isEmpty ||
@@ -45,6 +55,7 @@ class RegisterBookPageState extends State<RegisterBookPage> {
             content: Text('Por favor, completa todos los campos obligatorios.'),
           ),
         );
+        Navigator.of(context).pop(); // Cerrar el diálogo
         return;
       } else {
         BookModel book = BookModel(
@@ -77,6 +88,7 @@ class RegisterBookPageState extends State<RegisterBookPage> {
                   content: Text('Ya existe un libro con este ISBN.'),
                 ),
               );
+              Navigator.of(context).pop(); // Cerrar el diálogo
             }
           } else {
             FirebaseFirestore.instance
@@ -89,7 +101,8 @@ class RegisterBookPageState extends State<RegisterBookPage> {
                 .set(book)
                 .then((documentSnapshot) {
               if (context.mounted) {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); // Volver a la página anterior
               }
             }).catchError((err) {
               print(err);
@@ -99,6 +112,7 @@ class RegisterBookPageState extends State<RegisterBookPage> {
                     content: Text('Error al guardar los datos del usuario.'),
                   ),
                 );
+                Navigator.of(context).pop(); // Cerrar el diálogo
               }
             });
           }

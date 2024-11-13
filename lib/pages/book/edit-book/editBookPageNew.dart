@@ -26,40 +26,75 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
   final TextEditingController _yearEdition = TextEditingController();
   final TextEditingController _notes = TextEditingController();
   late DateTime finalEntryDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Usamos addPostFrameCallback para esperar a que se monte el widget y poder acceder a los argumentos
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as EditBookPageArguments;
+      FirebaseFirestore.instance
+          .collection(BookModel.tableName)
+          .doc(args.isbn)
+          .withConverter(
+            fromFirestore: BookModel.fromFirestore,
+            toFirestore: (BookModel book, options) => book.toFirestore(),
+          )
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          BookModel book = documentSnapshot.data()! as BookModel;
+          _tittle.text = book.title!;
+          _editorial.text = book.editorial!;
+          _author.text = book.author!;
+          _location.text = book.location!;
+          finalEntryDate = book.entryDate!.toDate();
+          _entryDate.text =
+              "${finalEntryDate.day}/${finalEntryDate.month}/${finalEntryDate.year}";
+          _primaryDescriptor.text = book.primaryDescriptor!;
+          _numberPages.text = book.pagination!;
+          _isbnCode.text = book.isbn!;
+          _secondaryDescriptor.text = book.secondaryDescriptor!;
+          _editingPlace.text = book.editingPlace!;
+          _edition.text = book.edition!;
+          _yearEdition.text = book.yearEdition!;
+          _notes.text = book.notes!;
+        }
+        //Navigator.of(context).pop(); // Cerrar el diálogo
+      });
+
+      setState(() {}); // Para actualizar la interfaz si es necesario
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false, // Evita cerrar el diálogo tocando fuera de él
+    //   builder: (BuildContext context) {
+    //     return Center(
+    //       child: CircularProgressIndicator(),
+    //     );
+    //   },
+    // );
     final args =
         ModalRoute.of(context)!.settings.arguments as EditBookPageArguments;
-    FirebaseFirestore.instance
-        .collection(BookModel.tableName)
-        .doc(args.isbn)
-        .withConverter(
-          fromFirestore: BookModel.fromFirestore,
-          toFirestore: (BookModel book, options) => book.toFirestore(),
-        )
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        BookModel book = documentSnapshot.data()! as BookModel;
-        _tittle.text = book.title!;
-        _editorial.text = book.editorial!;
-        _author.text = book.author!;
-        _location.text = book.location!;
-        finalEntryDate = book.entryDate!.toDate();
-        _entryDate.text =
-            "${finalEntryDate.day}/${finalEntryDate.month}/${finalEntryDate.year}";
-        _primaryDescriptor.text = book.primaryDescriptor!;
-        _numberPages.text = book.pagination!;
-        _isbnCode.text = book.isbn!;
-        _secondaryDescriptor.text = book.secondaryDescriptor!;
-        _editingPlace.text = book.editingPlace!;
-        _edition.text = book.edition!;
-        _yearEdition.text = book.yearEdition!;
-        _notes.text = book.notes!;
-      }
-    });
+
     Future<void> updateBook() async {
       //print("entraste");
+      showDialog(
+        context: context,
+        barrierDismissible:
+            false, // Evita cerrar el diálogo tocando fuera de él
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
       if (_tittle.text.isEmpty ||
           _editorial.text.isEmpty ||
           _author.text.isEmpty ||
@@ -77,6 +112,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
             content: Text('Por favor, completa todos los campos obligatorios.'),
           ),
         );
+        Navigator.of(context).pop(); // Cerrar el diálogo
         return;
       } else {
         BookModel book = BookModel(
@@ -95,16 +131,6 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
           yearEdition: _yearEdition.text,
         );
 
-        // FirebaseFirestore.instance
-        //     .collection(BookModel.tableName)
-        //     .doc(_isbnCode.text)
-        //     .withConverter(
-        //       fromFirestore: BookModel.fromFirestore,
-        //       toFirestore: (BookModel auxBook, options) =>
-        //           auxBook.toFirestore(),
-        //     )
-        //     .get()
-        //     .then((DocumentSnapshot documentSnapshot) {
         final ref = FirebaseFirestore.instance
             .collection(BookModel.tableName)
             .doc(_isbnCode.text)
@@ -114,7 +140,6 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
                   auxBook.toFirestore(),
             );
         final docSnap = await ref.get();
-        //BookModel auxBook = docSnap.data()!;
 
         if (docSnap.data() != null && docSnap["isbn"] != args.isbn) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -122,6 +147,8 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
               content: Text('Ya existe un libro con este ISBN.'),
             ),
           );
+          Navigator.of(context).pop(); // Cerrar el diálogo
+          return;
         } else {
           FirebaseFirestore.instance
               .collection(BookModel.tableName)
@@ -148,6 +175,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
 
             if (context.mounted) {
               Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Cerrar el diálogo
             }
           }).catchError((err) {
             print(err);
@@ -157,16 +185,17 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
                   content: Text('Error al guardar los datos del usuario.'),
                 ),
               );
+              Navigator.of(context).pop(); // Cerrar el diálogo
             }
           });
         }
       }
     }
 
-    print(args.isbn);
+    // print(args.isbn);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrar Libro'),
+        title: const Text('Editar Libro'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
