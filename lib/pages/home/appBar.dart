@@ -102,7 +102,7 @@ class MyAppBarWidget extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Text("Menu", style: TextStyle(color: Colors.black)),
+                      const Text("Menú", style: TextStyle(color: Colors.black)),
                       IconButton(
                         icon: Icon(Icons.more_vert, color: Colors.black),
                         onPressed: () {

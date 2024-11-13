@@ -48,8 +48,8 @@ class _EditUserPageState extends State<EditUserPage> {
     7: 'Química',
   };
 
-  late List<int> _selectedYear;
-  late List<int> _selectedCareer;
+  late List<int> _selectedYear = [1];
+  late List<int> _selectedCareer = [1];
 
   @override
   void initState() {

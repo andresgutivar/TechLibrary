@@ -86,9 +86,9 @@ class _ViewUsersPageState extends State<ViewUsersPage> {
                     } else {
                       // Si no hay errores y los datos estan cargados
                       if (usersFromFilterData.data != null) {
-                        return ListView(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8.0),
+                        return Column(
+                            // shrinkWrap: true,
+                            // padding: const EdgeInsets.all(8.0),
                             children: [
                               Column(
                                 children: usersFromFilterData.data!.map((user) {
