@@ -44,6 +44,8 @@ dependencies:
   flutter_dialog_helper: ^0.2.0
   flutter_modal_dialog: ^0.0.4
   select_searchable_list: ^0.2.3
+  star_menu: ^4.0.1
+  flutter_slider_drawer: ^2.1.3
 
 dev_dependencies:
   flutter_test:
