@@ -133,7 +133,7 @@ class RegisterBookPageState extends State<RegisterBookPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                _buildTextField(_tittle, 'Titulo', Icons.title_outlined,
+                _buildTextField(_tittle, 'Título', Icons.title_outlined,
                     RegisterBookPage.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(_editorial, 'Editorial', Icons.numbers,

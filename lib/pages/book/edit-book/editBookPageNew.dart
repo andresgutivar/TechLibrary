@@ -206,7 +206,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                _buildTextField(_tittle, 'Titulo', Icons.title_outlined,
+                _buildTextField(_tittle, 'Título', Icons.title_outlined,
                     EditBookPageNew.customColor),
                 const SizedBox(height: 16),
                 _buildTextField(_editorial, 'Editorial', Icons.numbers,
@@ -300,7 +300,7 @@ class _EditBookPageNewState extends State<EditBookPageNew> {
                       elevation: 6,
                     ),
                     child: const Text(
-                      'Registrar libro',
+                      'Editar libro',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),

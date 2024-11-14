@@ -29,7 +29,7 @@ class _NewUserPageState extends State<NewUserPage> {
   final TextEditingController _career = TextEditingController();
   final List<int> _selectedYear = [1];
   final Map<int, String> _listYears = {
-    1: 'Seleccionar anio',
+    1: 'Seleccionar año',
     2: '1',
     3: '2',
     4: '3',
@@ -41,12 +41,12 @@ class _NewUserPageState extends State<NewUserPage> {
 
   final Map<int, String> _listCareer = {
     1: 'Seleccionar especialidad',
-    2: 'Computacion',
-    3: 'Construccion',
-    4: 'Electronica',
+    2: 'Computación',
+    3: 'Construcción',
+    4: 'Electrónica',
     5: 'Electricidad',
-    6: 'Mecanica',
-    7: 'Quimica',
+    6: 'Mecánica',
+    7: 'Química',
   };
 
   @override
@@ -255,7 +255,7 @@ class _NewUserPageState extends State<NewUserPage> {
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
-                      _div, 'divicion', Icons.school, NewUserPage.customColor,
+                      _div, 'División', Icons.school, NewUserPage.customColor,
                       isNumeric: true),
                   const SizedBox(height: 16),
                   if (_year.text != _listYears[1] &&

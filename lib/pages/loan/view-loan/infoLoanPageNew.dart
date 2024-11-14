@@ -138,12 +138,12 @@ class infoLoanPageNew extends StatelessWidget {
                               customColor: customColor),
                           const SizedBox(height: 16),
                           MyText(
-                              text: 'Fecha de devolucion pactada',
+                              text: 'Fecha de devolución pactada',
                               value: formattedReturnDate,
                               customColor: customColor),
                           const SizedBox(height: 64),
                           Text(
-                            'Informacion sobre lector del libro',
+                            'Información sobre lector del libro',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
@@ -175,7 +175,7 @@ class infoLoanPageNew extends StatelessWidget {
                                     ViewUserDetailPageArguments(args.userId!),
                               ),
                               child: const Text(
-                                'Informacion sobre usuario',
+                                'Información sobre usuario',
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
@@ -215,7 +215,7 @@ class infoLoanPageNew extends StatelessWidget {
                                 builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Estas segura?'),
                                   content: const Text(
-                                      'Estas segura que deseas marcar este libro como devuelto?, ten en cuenta que se borraran todos los datos del prestamo.'),
+                                      '¿Estás segura de que deseas marcar este libro como devuelto? Ten en cuenta que se borrarán todos los datos del préstamo.'),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () =>
@@ -293,30 +293,30 @@ class MyText extends StatelessWidget {
   }
 }
 
-class DialogExample extends StatelessWidget {
-  const DialogExample({super.key});
+// class DialogExample extends StatelessWidget {
+//   const DialogExample({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: const Text('AlertDialog description'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      ),
-      child: const Text('Show Dialog'),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextButton(
+//       onPressed: () => showDialog<String>(
+//         context: context,
+//         builder: (BuildContext context) => AlertDialog(
+//           title: const Text('AlertDialog Title'),
+//           content: const Text('AlertDialog description'),
+//           actions: <Widget>[
+//             TextButton(
+//               onPressed: () => Navigator.pop(context, 'Cancel'),
+//               child: const Text('Cancel'),
+//             ),
+//             TextButton(
+//               onPressed: () => Navigator.pop(context, 'OK'),
+//               child: const Text('OK'),
+//             ),
+//           ],
+//         ),
+//       ),
+//       child: const Text('Show Dialog'),
+//     );
+//   }
+// }

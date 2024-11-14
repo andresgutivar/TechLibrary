@@ -93,7 +93,7 @@ class _RecoverAccountPageState extends State<RecoverAccountPage> {
                       elevation: 6, // Sombra del botón
                     ),
                     child: const Text(
-                      'Iniciar Sesión',
+                      'Enviar correo',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),

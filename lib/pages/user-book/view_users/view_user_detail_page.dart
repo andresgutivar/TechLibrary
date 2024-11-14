@@ -85,7 +85,7 @@ class ViewUserDetailPage extends StatelessWidget {
                               customColor: customColor),
                           SizedBox(height: 16),
                           MyText(
-                              text: 'Divicion',
+                              text: 'División',
                               value: user.div!,
                               customColor: customColor),
                           SizedBox(height: 16),

@@ -20,18 +20,18 @@ class BookInformationPage extends StatelessWidget {
               children: [
                 // SizedBox que contiene el texto con el estilo deseado
                 MyText(
-                    text: 'Titulo',
+                    text: 'Título',
                     value: book['title'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
-                    text: 'Autor',
+                    text: 'Autor/Autora',
                     value: book['author'],
                     customColor: customColor),
                 const SizedBox(height: 16),
 
                 MyText(
-                    text: 'Codigo ISBN',
+                    text: 'Código ISBN',
                     value: book['isbn'],
                     customColor: customColor),
                 const SizedBox(height: 16),
@@ -43,7 +43,7 @@ class BookInformationPage extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 MyText(
-                    text: 'Paginacion',
+                    text: 'Paginación',
                     value: book['pagination'],
                     customColor: customColor),
                 const SizedBox(height: 16),
@@ -54,22 +54,22 @@ class BookInformationPage extends StatelessWidget {
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
-                    text: 'Edicion',
+                    text: 'Edición',
                     value: book['edition'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
-                    text: 'Lugar de edicion',
+                    text: 'Lugar de edición',
                     value: book['editingPlace'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
-                    text: 'Anio de edicion',
+                    text: 'Año de edición',
                     value: book['yearEdition'],
                     customColor: customColor),
                 const SizedBox(height: 16),
                 MyText(
-                    text: 'Ubicacion fisica',
+                    text: 'Ubicación física',
                     value: book['location'],
                     customColor: customColor),
                 const SizedBox(height: 16),

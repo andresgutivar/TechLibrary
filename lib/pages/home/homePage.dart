@@ -58,57 +58,60 @@ class _HomePageState extends State<HomePage> {
     booksFromFilter = booksFromDB;
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: MyAppBarWidget(
-        customColor: customColor,
-        backgroundColorOptions: backgroundColorOptions,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: MyAppBarWidget(
+          customColor: customColor,
+          backgroundColorOptions: backgroundColorOptions,
+        ),
+        automaticallyImplyLeading: false,
       ),
-      automaticallyImplyLeading: false,
-    ),
-    body: Column(
-      children: [
-        Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
+      body: Column(
+        children: [
+          Center(child: _buildSearchBar()), // Coloca el SearchBar aquí
 
-        // Usar un Expanded o Flexible para que el ListView ocupe el espacio restante
-        Expanded(
-          child: StreamBuilder<List<Map<String, dynamic>>>( 
-            stream: booksFromFilter,
-            builder: (context, booksFromFilterData) {
-              if (booksFromFilterData.hasError) {
-                return Text('Error: ${booksFromFilterData.error}');
-              } else if (!booksFromFilterData.hasData &&
-                  booksFromFilterData.connectionState != ConnectionState.waiting) {
-                return Text(
-                    'Error al cargar los datos. Existe un problema con la aplicación. Contactese con los encargados de la aplicación.');
-              } else {
-                // Si no hay errores y los datos están cargados
-                if (booksFromFilterData.data != null) {
-                  return ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(8.0),
-                    children: booksFromFilterData.data!.map((user) {
-                      return _buildExpansionTileCard(context, user);
-                    }).toList(),
-                  );
+          // Usar un Expanded o Flexible para que el ListView ocupe el espacio restante
+          Expanded(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: booksFromFilter,
+              builder: (context, booksFromFilterData) {
+                if (booksFromFilterData.hasError) {
+                  return Text('Error: ${booksFromFilterData.error}');
+                } else if (!booksFromFilterData.hasData &&
+                    booksFromFilterData.connectionState !=
+                        ConnectionState.waiting) {
+                  return Text(
+                      'Error al cargar los datos. Existe un problema con la aplicación. Contactese con los encargados de la aplicación.');
                 } else {
-                  if (booksFromFilterData.connectionState == ConnectionState.done) {
-                    return Text("No se encontraron datos");
+                  // Si no hay errores y los datos están cargados
+                  if (booksFromFilterData.data != null) {
+                    return ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8.0),
+                      children: booksFromFilterData.data!.map((user) {
+                        return _buildExpansionTileCard(context, user);
+                      }).toList(),
+                    );
                   } else {
-                    return SingleChildScrollView(child:CircularProgressIndicator() ,) ;
-                    
+                    if (booksFromFilterData.connectionState ==
+                        ConnectionState.done) {
+                      return Text("No se encontraron datos");
+                    } else {
+                      return SingleChildScrollView(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   }
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   Widget _buildSearchBar() {
     return Padding(
@@ -274,7 +277,7 @@ Widget build(BuildContext context) {
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.bookmark),
-                    label: const Text("prestamo"),
+                    label: const Text("Préstamo"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: customColor,
                       foregroundColor: Colors.black,

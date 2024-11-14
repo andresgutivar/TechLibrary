@@ -40,8 +40,8 @@ class _EditUserPageState extends State<EditUserPage> {
 
   final Map<int, String> _listCareer = {
     1: 'Seleccionar especialidad',
-    2: 'Computacion',
-    3: 'Construccion',
+    2: 'Computación',
+    3: 'Construcción',
     4: 'Electrónica',
     5: 'Electricidad',
     6: 'Mecánica',
@@ -247,7 +247,7 @@ class _EditUserPageState extends State<EditUserPage> {
           return;
         } else {
           final user = UserBookModel(
-            rol: "docente",
+            rol: "Docente",
             name: _name.text,
             lastName: _lastName.text,
             dni: _dni.text,
@@ -261,7 +261,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('editar usuario'),
+        title: const Text('Editar usuario'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -330,7 +330,7 @@ class _EditUserPageState extends State<EditUserPage> {
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
-                      _div, 'divicion', Icons.school, EditUserPage.customColor,
+                      _div, 'División', Icons.school, EditUserPage.customColor,
                       isNumeric: true),
                   const SizedBox(height: 16),
                   if (_year.text != _listYears[1] &&
