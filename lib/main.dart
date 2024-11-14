@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import "pages/login/login_page.dart";
-import 'pages/home/homePage.dart';
+import 'package:biblioteca/pages/home/homePage.dart';
 import 'pages/login/recover_account_page.dart';
 import 'pages/login/sign_up_page.dart';
 import 'pages/book/new-book/registerbookPage.dart';
@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
             // If the snapshot has data, it means a user is logged in
             if (snapshot.data != null) {
               if (snapshot.data!.emailVerified) {
+                print("entraste");
                 // El usuario ya esta loggeado y verificado
 
                 // Ir a buscar el DNI del usuario, mediante el UID
@@ -87,9 +88,11 @@ class MyApp extends StatelessWidget {
                   (querySnapshot) {
                     CurrentUserData.currentDniUser =
                         querySnapshot.docs[0].data()['dni'];
+                    print("todo bien");
                   },
                   onError: (e) => print("Error completing: $e"),
                 );
+                print("saliste");
                 return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {
@@ -113,6 +116,7 @@ class MyApp extends StatelessWidget {
               }
             } else {
               // No user logged in
+
               return LoginPage();
             }
           } else {
