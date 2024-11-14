@@ -76,7 +76,6 @@ class MyApp extends StatelessWidget {
             // If the snapshot has data, it means a user is logged in
             if (snapshot.data != null) {
               if (snapshot.data!.emailVerified) {
-                print("entraste");
                 // El usuario ya esta loggeado y verificado
 
                 // Ir a buscar el DNI del usuario, mediante el UID
@@ -88,11 +87,9 @@ class MyApp extends StatelessWidget {
                   (querySnapshot) {
                     CurrentUserData.currentDniUser =
                         querySnapshot.docs[0].data()['dni'];
-                    print("todo bien");
                   },
                   onError: (e) => print("Error completing: $e"),
                 );
-                print("saliste");
                 return HomePage();
               } else {
                 SharedPreferences.getInstance().then((prefs) {

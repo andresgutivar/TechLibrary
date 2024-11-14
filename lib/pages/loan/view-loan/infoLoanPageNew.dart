@@ -81,7 +81,7 @@ class infoLoanPageNew extends StatelessWidget {
                       if (snapshot.data != null) {
                         // los datos no son nulos
                         UserModel user = snapshot.data!.data() as UserModel;
-
+                        //print("hola" + user.toString());
                         return Column(children: [
                           Text(
                             'Informacion sobre la prestadora',
@@ -292,31 +292,3 @@ class MyText extends StatelessWidget {
         ));
   }
 }
-
-// class DialogExample extends StatelessWidget {
-//   const DialogExample({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextButton(
-//       onPressed: () => showDialog<String>(
-//         context: context,
-//         builder: (BuildContext context) => AlertDialog(
-//           title: const Text('AlertDialog Title'),
-//           content: const Text('AlertDialog description'),
-//           actions: <Widget>[
-//             TextButton(
-//               onPressed: () => Navigator.pop(context, 'Cancel'),
-//               child: const Text('Cancel'),
-//             ),
-//             TextButton(
-//               onPressed: () => Navigator.pop(context, 'OK'),
-//               child: const Text('OK'),
-//             ),
-//           ],
-//         ),
-//       ),
-//       child: const Text('Show Dialog'),
-//     );
-//   }
-// }

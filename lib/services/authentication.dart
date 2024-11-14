@@ -69,7 +69,7 @@ class AuthenticationService {
             content: Text('Revisa tu email para el recupero de la clave')),
       );
       // Optionally, navigate to the login page after showing the message
-      Navigator.of(context).pushNamed('/login');
+      Navigator.of(context).pop();
     } catch (e) {
       // Handle errors, e.g., show an error message
       ScaffoldMessenger.of(context).showSnackBar(
