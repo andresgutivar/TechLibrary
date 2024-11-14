@@ -74,6 +74,11 @@ class ViewUserDetailPage extends StatelessWidget {
                             customColor: customColor),
                         SizedBox(height: 16),
                         MyText(
+                            text: 'Mail',
+                            value: user.email!,
+                            customColor: customColor),
+                        SizedBox(height: 16),
+                        MyText(
                             text: 'Rol',
                             value: user.rol!,
                             customColor: customColor),
